@@ -1,0 +1,12 @@
+[package]
+name = "smolprng"
+version = "0.1.0"
+edition = "2021"
+authors = ["Dustin Kenefake"]
+license = "BSD-3-Clause"
+description = "A Small and Extensible PRNG written in Rust"
+repository = "https://github.com/DKenefake/SmolPRNG/"
+readme = "README.md"
+homepage = "https://github.com/DKenefake/SmolPRNG/"
+
+[dependencies]
