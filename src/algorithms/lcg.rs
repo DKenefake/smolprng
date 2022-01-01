@@ -8,6 +8,7 @@ use crate::smol_core::Algorithm;
 ///
 /// This is overall a very fast algorithm, but LCGs have fairly bad randomness properties and should be avoided for applications that need high quility random numbers
 ///
+
 #[derive(Default)]
 pub struct LCG {
     pub(crate) data: u64,

@@ -12,7 +12,13 @@ pub struct SplitMix32 {
     pub(crate) data: [u64; 2],
 }
 
+#[derive(Default)]
+pub struct SplitMix64{
+    pub(crate) data: u64,
+}
+
 prng_iter! {SplitMix32}
+prng_iter! {SplitMix64}
 
 impl Algorithm for SplitMix32 {
     type Output = u32;
@@ -29,5 +35,18 @@ impl Algorithm for SplitMix32 {
         seed = seed.overflowing_mul(0xcb24d0a5c88c35b3u64).0;
 
         (seed >> 32) as u32
+    }
+}
+
+impl Algorithm for SplitMix64 {
+    type Output = u64;
+
+    fn gen(&mut self) -> Self::Output {
+        self.data = self.data.overflowing_add(0x9E3779B97f4A7C15u64).0;
+        let mut result = self.data;
+        result = (result^(result >> 30)).overflowing_mul(0xBF58476D1CE4E5B9u64).0;
+        result = (result^(result >> 27)).overflowing_mul(0x94D049BB133111EBu64).0;
+        result^(result >> 31)
+
     }
 }

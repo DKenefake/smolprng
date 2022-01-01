@@ -34,6 +34,8 @@ mod tests {
         };
     }
 
+    // prng_test!{test_step_generator_8, StepGenerator8}
+
     #[test]
     fn test_step_generator_8() {
         let step = StepGenerator8::default();
@@ -125,5 +127,43 @@ mod tests {
     fn splitmix_32_test() {
         let splitmix = SplitMix32::default();
         prng_gen!(splitmix);
+    }
+
+    #[test]
+    fn splitmix_64_test(){
+        let splitmix = SplitMix64::default();
+        prng_gen!(splitmix);
+    }
+
+    #[test]
+    fn xoshiro_256_plusplus_test(){
+        let xorshiro = XoShiro256PlusPlus::default();
+        prng_gen!(xorshiro);
+    }
+
+    #[test]
+    fn xoshiro_256_plus_test(){
+        let xorshiro = XoShiro256Plus::default();
+        prng_gen!(xorshiro);
+    }
+
+    #[test]
+    fn xoroshiro_128_plusplus_test(){
+        let xorshiro = XoroShiro128PlusPlus::default();
+        prng_gen!(xorshiro);
+    }
+
+
+    #[test]
+    fn xoroshiro_128_plus_test(){
+        let xorshiro = XoroShiro128Plus::default();
+        prng_gen!(xorshiro);
+    }
+
+
+    #[test]
+    fn xoroshiro_128_superstar_test(){
+        let xorshiro = XoroShiro128SuperStar::default();
+        prng_gen!(xorshiro);
     }
 }

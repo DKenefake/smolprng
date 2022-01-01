@@ -8,6 +8,7 @@ pub mod splitmix;
 pub mod step_generators;
 pub mod xorshift;
 pub mod xoshiro;
+pub mod xoroshiro;
 
 pub use jsf::*;
 pub use lcg::*;
@@ -17,6 +18,7 @@ pub use splitmix::*;
 pub use step_generators::*;
 pub use xorshift::*;
 pub use xoshiro::*;
+pub use xoroshiro::*;
 
 pub use crate::smol_core::*;
 
