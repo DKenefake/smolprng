@@ -5,7 +5,7 @@ This is a small PRNG library/framwork written in pure Rust, that is a translatio
 
 To live up to the name of ``SmolPRNG`` there are less then 1000 lines of code but implements over 22 different algorithms out of the box, can sample from 15 statistical distributions this includes all code + tests + docs + benchs.
 
-SmolPRNG is performance competative to the Rand Rust crate.
+SmolPRNG is performance competative to the Rand Rust crate and is much more straightforward to extend.
 
 ### Features
 
