@@ -3,16 +3,18 @@
 
 This is a small PRNG library/framwork written in pure Rust, that is a translation of another project of mine, [SmallPRNG](https://github.com/DKenefake/SmallPRNG). The main goal of this project is to not implement every feature possible but to provide a general framework for implmenting PRNG algorithms to test monte carlo codes. This was made primarilly as a educational project of learning Rust and it's features but I hope that this can be used for productive projects like SmallPRNG was. 
 
-To live up to the name of ``SmolPRNG`` there are less then 650 lines of code but implements over 22 different algorithms out of the box, with all features implmented I do not expect more then 1000 lines of code in total (fingers crossed).
+To live up to the name of ``SmolPRNG`` there are less then 850 lines of code but implements over 22 different algorithms out of the box, can sample from 15 statistical distributions. With everything said and done, I do not expect this project to be more then 1500 lines of code in total (Code + Tests + Docs + Bench).
 
 ### Features
 
 - [X] Interface
 - [x] PRNG Algorithms
 - [x] Generate unsigned ints
-- [x] Generate uniform floating point
+- [x] Generate uniform ``f32``,``f64``
 - [x] Distributions (Normal, Integer Ranges, Bernoulli, ect)
-- [ ] Easy seeding of algorithm states
+- [ ] Easy seeding of algorithm states -> Stream Chypher?
+- [ ] Benchmarking
+- [ ] TestU01 Validation
 
 
 ## Generate Numbers
