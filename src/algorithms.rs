@@ -107,11 +107,6 @@ pub fn make_1_u32(mut prng: PRNG<SplitMix64>) -> u32 {
     prng.gen_u32()
 }
 
-///makes 2 u32
-pub fn make_2_u32(mut prng: PRNG<SplitMix64>) -> [u32; 2] {
-    [prng.gen_u32(), prng.gen_u32()]
-}
-
 ///makes 4 u32
 pub fn make_4_u32(mut prng: PRNG<SplitMix64>) -> [u32; 4] {
     [

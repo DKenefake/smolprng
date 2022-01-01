@@ -3,10 +3,11 @@
 extern crate test;
 
 use smolprng::{
-    JsfLarge, MiddleSquare, Sfc32, Sfc32Small, SplitMix32, SplitMix64, StepGenerator128,
-    StepGenerator16, StepGenerator32, StepGenerator64, StepGenerator8, XoShiro256Plus,
-    XoShiro256PlusPlus, XoShiro256SuperStar, XorShift128, XorShift128Plus, XorShift32, XorShift64,
-    XoroShiro128Plus, XoroShiro128PlusPlus, XoroShiro128SuperStar, LCG, PRNG,
+    Algorithm, AlgorithmOutput, JsfLarge, MiddleSquare, Sfc32, Sfc32Small, SplitMix32, SplitMix64,
+    StepGenerator128, StepGenerator16, StepGenerator32, StepGenerator64, StepGenerator8,
+    XoShiro256Plus, XoShiro256PlusPlus, XoShiro256SuperStar, XorShift128, XorShift128Plus,
+    XorShift32, XorShift64, XoroShiro128Plus, XoroShiro128PlusPlus, XoroShiro128SuperStar, LCG,
+    PRNG,
 };
 use test::Bencher;
 

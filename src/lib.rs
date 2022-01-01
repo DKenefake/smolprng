@@ -13,15 +13,36 @@ mod tests {
     use crate::*;
 
     macro_rules! prng_gen {
-        ($generator:ident, $dist_run:expr) => {
+        ($generator:ident, $generator_type:ty, $dist_run:expr) => {
             let mut prng = PRNG {
                 generator: $generator,
             };
+
             prng.gen_u8();
+
+            prng = PRNG {
+                generator: <$generator_type>::from(5u8),
+            };
+
             prng.gen_u16();
+            prng = PRNG {
+                generator: <$generator_type>::from(5u16),
+            };
+
             prng.gen_u32();
+            prng = PRNG {
+                generator: <$generator_type>::from(5u32),
+            };
+
             prng.gen_u64();
+            prng = PRNG {
+                generator: <$generator_type>::from(5u64),
+            };
+
             prng.gen_u128();
+            prng = PRNG {
+                generator: <$generator_type>::from(5u128),
+            };
 
             prng.gen_f64();
             prng.gen_f32();
@@ -32,6 +53,7 @@ mod tests {
 
             if $dist_run {
                 prng.poisson(1f64);
+                prng.poisson(12f64);
                 prng.gamma(0.5, 0.5);
                 prng.chi_squared(10.0);
                 prng.normal();
@@ -50,132 +72,43 @@ mod tests {
 
     // prng_test!{test_step_generator_8, StepGenerator8}
 
-    #[test]
-    fn test_step_generator_8() {
-        let step = StepGenerator8::default();
-        prng_gen!(step, false);
+    macro_rules! gen_init_test {
+        ($fn_name:ident, $gen_type:ty, $check_dist:expr) => {
+            #[test]
+            fn $fn_name() {
+                let prng = <$gen_type>::default();
+                prng_gen! {prng, $gen_type, $check_dist};
+            }
+        };
     }
 
-    #[test]
-    fn test_step_generator_16() {
-        let step = StepGenerator16::default();
-        prng_gen!(step, false);
-    }
+    gen_init_test! {test_step_generator_8, StepGenerator8, false}
+    gen_init_test! {test_step_generator_16, StepGenerator16, false}
+    gen_init_test! {test_step_generator_32, StepGenerator32, false}
+    gen_init_test! {test_step_generator_64, StepGenerator64, false}
+    gen_init_test! {test_step_generator_128, StepGenerator128, false}
 
-    #[test]
-    fn test_step_generator_32() {
-        let step = StepGenerator32::default();
-        prng_gen!(step, false);
-    }
+    gen_init_test! {test_jsf_large, JsfLarge, true}
+    gen_init_test! {test_middle_square, MiddleSquare, false}
+    gen_init_test! {test_lcg, LCG, false}
 
-    #[test]
-    fn test_step_generator_64() {
-        let step = StepGenerator64::default();
-        prng_gen!(step, false);
-    }
+    gen_init_test! {test_scf_32, Sfc32, false}
+    gen_init_test! {test_scf_32_small, Sfc32Small, false}
 
-    #[test]
-    fn test_step_generator_128() {
-        let step = StepGenerator128::default();
-        prng_gen!(step, false);
-    }
+    gen_init_test! {test_xor32, XorShift32, false}
+    gen_init_test! {test_xor64, XorShift64, false}
+    gen_init_test! {test_xor128, XorShift128, false}
+    gen_init_test! {test_xor128_plus, XorShift128Plus, false}
 
-    #[test]
-    fn test_jsf() {
-        let jsf = JsfLarge::default();
-        prng_gen!(jsf, true);
-    }
+    gen_init_test! {test_xoshiro_256_super_star, XoShiro256SuperStar, false}
 
-    #[test]
-    fn middle_square_test() {
-        let middle_square = MiddleSquare::default();
-        prng_gen!(middle_square, false);
-    }
+    gen_init_test! {test_splitmix_32, SplitMix32, false}
+    gen_init_test! {test_splitmix_64, SplitMix64, false}
 
-    #[test]
-    fn lcg_test() {
-        let lcg = LCG::default();
-        prng_gen!(lcg, false);
-    }
+    gen_init_test! {test_xoshiro_256_plus, XoShiro256Plus, false}
+    gen_init_test! {test_xoshiro_256_plus_plus, XoShiro256PlusPlus, false}
 
-    #[test]
-    fn scf32_test() {
-        let scf32 = Sfc32::default();
-        prng_gen!(scf32, false);
-    }
-
-    #[test]
-    fn scf32_small_test() {
-        let scf32_small = Sfc32Small::default();
-        prng_gen!(scf32_small, false);
-    }
-
-    #[test]
-    fn xor32_test() {
-        let xor32 = XorShift32::default();
-        prng_gen!(xor32, false);
-    }
-    #[test]
-    fn xor64_test() {
-        let xor64 = XorShift64::default();
-        prng_gen!(xor64, false);
-    }
-    #[test]
-    fn xor128_test() {
-        let xor128 = XorShift128::default();
-        prng_gen!(xor128, false);
-    }
-    #[test]
-    fn xor128_plus_test() {
-        let xor128plus = XorShift128Plus::default();
-        prng_gen!(xor128plus, false);
-    }
-
-    #[test]
-    fn xoshiro256_super_star_test() {
-        let xor128plus = XoShiro256SuperStar::default();
-        prng_gen!(xor128plus, false);
-    }
-
-    #[test]
-    fn splitmix_32_test() {
-        let splitmix = SplitMix32::default();
-        prng_gen!(splitmix, false);
-    }
-
-    #[test]
-    fn splitmix_64_test() {
-        let splitmix = SplitMix64::default();
-        prng_gen!(splitmix, false);
-    }
-
-    #[test]
-    fn xoshiro_256_plusplus_test() {
-        let xorshiro = XoShiro256PlusPlus::default();
-        prng_gen!(xorshiro, false);
-    }
-
-    #[test]
-    fn xoshiro_256_plus_test() {
-        let xorshiro = XoShiro256Plus::default();
-        prng_gen!(xorshiro, false);
-    }
-
-    #[test]
-    fn xoroshiro_128_plusplus_test() {
-        let xorshiro = XoroShiro128PlusPlus::default();
-        prng_gen!(xorshiro, false);
-    }
-
-    #[test]
-    fn xoroshiro_128_plus_test() {
-        let xorshiro = XoroShiro128Plus::default();
-        prng_gen!(xorshiro, false);
-    }
-
-    #[test]
-    fn xoroshiro_128_superstar_test() {
-        let xorshiro = XoroShiro128SuperStar::default();
-        prng_gen!(xorshiro, false);
-    }
+    gen_init_test! {test_xoroshiro_256_plus_plus, XoroShiro128PlusPlus, false}
+    gen_init_test! {test_xoroshiro_256_plus, XoroShiro128Plus, false}
+    gen_init_test! {test_xorpshiro_256_super_star, XoroShiro128SuperStar, false}
 }
