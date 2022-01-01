@@ -3,7 +3,7 @@
 
 This is a small PRNG library/framwork written in pure Rust, that is a translation of another project of mine, [SmallPRNG](https://github.com/DKenefake/SmallPRNG). The main goal of this project is to not implement every feature possible but to provide a general framework for implmenting PRNG algorithms to test monte carlo codes. This was made primarilly as a educational project of learning Rust and it's features but I hope that this can be used for productive projects like SmallPRNG was. 
 
-To live up to the name of ``SmolPRNG`` there are less then 750 lines of code but implements over 22 different algorithms out of the box, can sample from 15 statistical distributions. With everything said and done, I do not expect this project to be more then 1500 lines of code in total (Code + Tests + Docs + Bench).
+To live up to the name of ``SmolPRNG`` there are less then 750 lines of code but implements over 22 different algorithms out of the box, can sample from 15 statistical distributions. With everything said and done, I do not expect this project to be more then 1000 lines of code in total (Code + Tests + Docs + Bench).
 
 ### Features
 
