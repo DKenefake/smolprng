@@ -1,6 +1,6 @@
 #![crate_name = "smolprng"]
 #![warn(missing_docs)]
-//! This is a PRNG Package
+//! This is a PRNG Package SmolPRNG a small Rust package for pseudo-random  number generation
 //!
 // mod algorithms::jsf;
 pub mod algorithms;
