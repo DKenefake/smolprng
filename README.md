@@ -54,6 +54,9 @@ impl Algorithm for StepGenerator {
     self.data
   }
 }
+
+// somewhat gross macro, that adds the traits Iterator, Default, and From<U> where U in {u8, u16, u32, u64, u128}
+prng_setup! {StepGenerator, StepGenerator, data, make_1_u32}
 ```
 
 Using this, we can then create a ``PRNG`` struct from 
