@@ -1,6 +1,7 @@
 //! This is the central module in the SmolPRNG crate, as this is where the definitions of PRNG, Algorithm, and AlgorithmOutput reside
 
 use std::ops::{BitAnd, BitOrAssign, Shl};
+use std::f64::consts::E;
 
 /// PRNG is the central pseudo-random number generating front end.
 /// This is the front end for the enture package.
@@ -156,10 +157,131 @@ impl<T: Algorithm> PRNG<T> {
         let val = 0x1FFu32 | self.gen_u32() >> 9;
         f32::from_bits(val) - 1.0f32
     }
-}
 
-/// Trait signature of the Distribution trait, might be removed and incorperatoed into the PRNG class
-pub trait Distribution<T: Algorithm, N> {
-    ///Samples a specified distribution
-    fn sample(&self, rng: &mut PRNG<T>) -> N;
+    ///Samples a normal distribution N(0,1) for 1 sample
+    pub fn normal(&mut self) -> f64{
+        let (mut u,mut s) = (0f64,0f64);
+
+        while s >= 1f64 || s == 0f64{
+            u = self.gen_f64()*2.0-1.0;
+            let v = self.gen_f64()*2.0-1.0;
+            s = u*u + v*s;
+        }
+
+        s = (-2f64*(s.log(E))/s).sqrt();
+        u*s
+    }
+
+    ///Samples a bernoulli distribution with B(p)
+    pub fn bernoulli(&mut self, p:f64) -> u64{
+        match p > self.gen_f64()  {
+            true => 1,
+            false => 0
+        }
+    }
+
+    ///Samples a binomial distribution with B(n,p)
+    pub fn binomial(&mut self,n:u64,p:f64) -> u64{
+        let mut count = 0;
+        for _i in 0..n{
+            count += self.bernoulli(p);
+        }
+        count
+    }
+
+    ///Samples a Cauchy Distribution
+    pub fn cauchy(&mut self) -> f64{
+        self.normal() / self.normal()
+    }
+
+    ///Samples a Gamma Distribution with Γ(α,ß)
+    pub fn gamma(&mut self, alpha:f64, beta:f64) -> f64{
+        if alpha <= 1f64{
+            return self.gamma(alpha + 1.0, beta)*(self.gen_f64().powf(1f64/alpha))
+        }
+
+        let d = alpha - 1f64 / 3f64;
+        let c = 1f64 / ((9f64*d).sqrt());
+
+        loop{
+            let u = self.gen_f64();
+            let x = self.normal();
+            let mut v = 1f64 +c*x;
+
+            v = v*v*v;
+
+            if v > 0f64 && u.log(E) < 0.5*x*x+d-d*v+d*v.log(E) {
+                    return d*v*beta;
+            }
+        }
+    }
+
+    /// Samples a Chi square distribution with nu degrees of freedom
+    pub fn chi_squared(&mut self,nu:f64) -> f64{
+        self.gamma(0.5*nu, 2.0)
+    }
+
+    /// Samples a beta distribution
+    pub fn beta(&mut self, alpha: f64, beta:f64) -> f64{
+        let x = self.gamma(alpha,1f64);
+        let y = self.gamma(beta,1f64);
+        x/(x+y)
+    }
+
+    ///Samples a exponential distribution
+    pub fn exponential(&mut self,lambda:f64) -> f64{
+        -self.gen_f64().log(E)/lambda
+    }
+
+    ///samples a log nromal distribution
+    pub fn lognormal(&mut self) -> f64{
+        self.normal().exp()
+    }
+
+    ///samples a logistic distribution
+    pub fn logistic(&mut self, mu:f64, beta:f64) -> f64{
+        let x = self.gen_f64();
+        mu + beta*((x/(1.0-x)).log(E))
+    }
+
+    ///samples a fischer distribution
+    pub fn fischer(&mut self, d1:f64, d2:f64) -> f64{
+        let x_1 = self.chi_squared(d1);
+        let x_2 = self.chi_squared(d1);
+        (x_1/d1) / (x_2/d2)
+    }
+
+    ///samples a poisson distribution
+    pub fn poisson(&mut self, l:f64) -> u64{
+        let mut n = 0;
+        let mut m = 0;
+        let cutoff_f = 10f64;
+        let mut l_ = l;
+
+        while l_ > cutoff_f{
+            m += self.poisson(cutoff_f);
+            l_ -= cutoff_f;
+        }
+
+        let cdf = self.gen_f64() * E;
+        let mut prod = 1f64;
+        let mut denom = 1f64;
+        let mut sum = 1f64;
+
+        while sum < cdf{
+            n += 1;
+            prod *= l;
+            denom *= n as f64;
+            sum += prod / denom
+        }
+
+        n+m
+    }
+
+    ///samples a negative binomial distribution
+    pub fn negative_binomial(&mut self, r:f64, p:f64) -> u64{
+        let lambda = self.gamma(r, p / (1.0 - p));
+        self.poisson(lambda)
+    }
+
 }

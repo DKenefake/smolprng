@@ -4,7 +4,7 @@ use crate::prng_iter;
 use crate::smol_core;
 use crate::smol_core::Algorithm;
 
-///Simple struct definition of the SplitMix32 Algorithm propsed by Guy Steele et al.
+/// Simple struct definition of the SplitMix32 Algorithm propsed by Guy Steele et al.
 /// original C source code can be found [here](http://wwwlgis.informatik.uni-kl.de/cms/fileadmin/publications/2020/thesis.pdf).
 /// The C++ that this package is based on can be found [here](https://github.com/DKenefake/SmallPRNG/blob/master/prng.h).
 #[derive(Default)]
@@ -12,6 +12,7 @@ pub struct SplitMix32 {
     pub(crate) data: [u64; 2],
 }
 
+///Simple struct definition of the SplitMix64 Algorithm
 #[derive(Default)]
 pub struct SplitMix64{
     pub(crate) data: u64,

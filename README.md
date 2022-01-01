@@ -11,7 +11,7 @@ To live up to the name of ``SmolPRNG`` there are less then 650 lines of code but
 - [x] PRNG Algorithms
 - [x] Generate unsigned ints
 - [x] Generate uniform floating point
-- [ ] Distributions (Normal, Integer Ranges, Bernoulli, ect)
+- [x] Distributions (Normal, Integer Ranges, Bernoulli, ect)
 - [ ] Easy seeding of algorithm states
 
 

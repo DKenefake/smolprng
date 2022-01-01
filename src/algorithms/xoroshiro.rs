@@ -6,16 +6,20 @@ use crate::prng_iter;
 use crate::smol_core;
 use crate::smol_core::Algorithm;
 
+///This is the simple struct definition for the Xoroshiro128++ algorithm
 #[derive(Default)]
 pub struct XoroShiro128PlusPlus{
     pub(crate) data: [u32; 4],
 }
 
+///This is the simple struct definition for the Xoroshiro128** algorithm
 #[derive(Default)]
 pub struct XoroShiro128SuperStar{
     pub(crate) data: [u64; 2],
 }
 
+///This is the simple struct definition for the Xoroshiro128+ algorithm
+/// This should only be used to generate floting point numbers and literally nothing else
 #[derive(Default)]
 pub struct XoroShiro128Plus{
     pub(crate) data: [u64;2],

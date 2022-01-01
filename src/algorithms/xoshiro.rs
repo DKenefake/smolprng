@@ -5,17 +5,19 @@ use crate::prng_iter;
 use crate::smol_core;
 use crate::smol_core::Algorithm;
 
-/// This is the struct definition for the state of the XoShiro256SuperStar algorithm
+/// This is the struct definition for the state of the XoShiro256** algorithm
 #[derive(Default)]
 pub struct XoShiro256SuperStar {
     pub(crate) data: [u64; 4],
 }
 
+/// This is the struct definition of the state of Xoshiro256++ algorithm
 #[derive(Default)]
 pub struct XoShiro256PlusPlus{
     pub(crate) data:[u64;4],
 }
 
+/// This is the struct definition of the state of Xoshiro256+ algorithm
 #[derive(Default)]
 pub struct XoShiro256Plus{
     pub(crate) data: [u64; 4],
