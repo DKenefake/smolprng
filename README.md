@@ -1,6 +1,15 @@
 # SmolPRNG
 
-This is a small PRNG library/framwork written in pure Rust, that is a translation of another project of mine [SmallPRNG](https://github.com/DKenefake/SmallPRNG). The main goal of this project is to not implement every feature possible but to provide a general framework for implmenting PRNG algorithms to test monte carlo codes.
+This is a small PRNG library/framwork written in pure Rust, that is a translation of another project of mine, [SmallPRNG](https://github.com/DKenefake/SmallPRNG). The main goal of this project is to not implement every feature possible but to provide a general framework for implmenting PRNG algorithms to test monte carlo codes.
+
+### Features
+
+- [X] Interface
+- [x] PRNG Algorithms
+- [x] Generate unsigned ints
+- [x] Generate uniform floating point
+- [ ] Distributions (Normal, ect)
+- [ ] Easy seeding of algorithms 
 
 
 ## Generate Numbers
@@ -19,7 +28,7 @@ let rand_u64 = prng.gen_u64();    //Generates a random u64
 let rand_u128 = prng.gen_u128();  //Generates a random u128
 
 let rand_f32 = prng.gen_f32();    //Generates a random f32
-let rand_f32 = prng.gen_f64();    //Generates a random f64
+let rand_f64 = prng.gen_f64();    //Generates a random f64
 ```
 
 
