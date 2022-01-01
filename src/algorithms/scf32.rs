@@ -1,12 +1,22 @@
+//! This module contains the implmentations for the SFC family of PRNG algorithms
+
 use crate::prng_iter;
 use crate::smol_core;
 use crate::smol_core::Algorithm;
+
+/// Simple struct definition for the SFC32 algorithm
+/// The translated tree is C -> C++ -> Rust. The original source can be found
+/// [here](http://wwwlgis.informatik.uni-kl.de/cms/fileadmin/publications/2020/thesis.pdf)
 
 #[derive(Default)]
 pub struct Sfc32 {
     pub(crate) data: [u32; 4],
 }
 prng_iter! {Sfc32}
+
+/// Simple struct definition for the SFC32_Small algorithm
+/// The translated tree is C -> C++ -> Rust. The original source can be found
+/// [here](http://wwwlgis.informatik.uni-kl.de/cms/fileadmin/publications/2020/thesis.pdf)
 
 #[derive(Default)]
 pub struct Sfc32Small {

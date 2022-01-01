@@ -1,3 +1,5 @@
+//! This is the module that contains all the algorithms implmented in the package
+
 pub mod jsf;
 pub mod lcg;
 pub mod middle_square;
@@ -18,9 +20,11 @@ pub use xoshiro::*;
 
 pub use crate::smol_core::*;
 
+///A macro that will add the implmentation of ``Iterator`` for a given PRNG
 #[macro_export]
 macro_rules! prng_iter {
     ($algo_struct_name:ty) => {
+        ///Implements Iterator for the PRNG
         impl Iterator for $algo_struct_name {
             type Item = <$algo_struct_name as smol_core::Algorithm>::Output;
 

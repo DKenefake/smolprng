@@ -1,6 +1,7 @@
 #![crate_name = "smolprng"]
-// #![warn(missing_docs)]
-
+#![warn(missing_docs)]
+//! This is a PRNG Package
+//!
 // mod algorithms::jsf;
 pub mod algorithms;
 pub mod distributions;
@@ -65,7 +66,7 @@ mod tests {
 
     #[test]
     fn test_jsf() {
-        let jsf = JsfGenerator::default();
+        let jsf = JsfLarge::default();
         prng_gen!(jsf);
     }
 

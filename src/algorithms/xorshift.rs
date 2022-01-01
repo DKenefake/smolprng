@@ -1,22 +1,30 @@
+//! This is the general implementation of XorShift Family PRNGs
+//!
+//!
+
 use crate::prng_iter;
 use crate::smol_core;
 use crate::smol_core::Algorithm;
 
+/// This is the struct definition for the XorShift32 algorithm
 #[derive(Default)]
 pub struct XorShift32 {
     pub(crate) data: u32,
 }
 
+/// This is the struct definition for the XorShift64 algorithm
 #[derive(Default)]
 pub struct XorShift64 {
     pub(crate) data: u64,
 }
 
+/// This is the struct definition for the XorShift128 algorithm
 #[derive(Default)]
 pub struct XorShift128 {
     pub(crate) data: [u32; 4],
 }
 
+/// This is the struct definition for the XorShift128+ algorithm
 #[derive(Default)]
 pub struct XorShift128Plus {
     pub(crate) data: [u64; 2],

@@ -1,3 +1,5 @@
+//! The definitions for the uniform distributions
+
 // use crate::{Algorithm, Distribution, PRNG, SmolGenerator};
 
 // struct Uniform<L:> {

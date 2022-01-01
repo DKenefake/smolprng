@@ -1,7 +1,11 @@
+//! This is the general module for implmentation of XoShiro type algorithms
+//!
+
 use crate::prng_iter;
 use crate::smol_core;
 use crate::smol_core::Algorithm;
 
+/// This is the struct definition for the state of the XoShiro256SuperStar algorithm
 #[derive(Default)]
 pub struct XoShiro256SuperStar {
     pub(crate) data: [u64; 4],

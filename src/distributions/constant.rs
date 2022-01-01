@@ -1,3 +1,5 @@
+//! The Constant Module contains the distributions with constant output
+
 use crate::{Algorithm, Distribution, PRNG};
 
 /// This Defines the Uniform distribution of the range

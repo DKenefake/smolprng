@@ -1,6 +1,11 @@
+//! This module implments improved versions of the middle square algorithm
+
 use crate::prng_iter;
 use crate::smol_core;
 use crate::smol_core::Algorithm;
+
+/// This is the simple struct definition for the improved version of the middle squares algorithm
+/// this has very strong randomness properties and is very fast in the general setting.
 
 #[derive(Default)]
 pub struct MiddleSquare {

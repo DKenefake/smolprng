@@ -1,9 +1,13 @@
+//! Implements the ``StepGenerators`` algorithms, these are not ment to be used for tasks that require PRNG.
+
 use crate::prng_iter;
 use crate::smol_core;
 use crate::smol_core::Algorithm;
 
 macro_rules! make_step {
     ($name:ident,$typing:ty) => {
+        /// Simple Struct definition for a StepGenerator
+        /// Obviouslt this has no random qualities at all and is only here for benchmarking purposes.
         #[derive(Default)]
         pub struct $name {
             pub(crate) data: $typing,
