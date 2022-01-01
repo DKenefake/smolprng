@@ -1,8 +1,7 @@
 //! This module impliments JSF type algorithms
 
-use crate::{prng_setup,make_4_u64, PRNG, AlgorithmOutput, make_default_stream, make_stream};
 use crate::smol_core::Algorithm;
-
+use crate::{make_4_u64, make_default_stream, make_stream, prng_setup, AlgorithmOutput, PRNG};
 
 /// This is the simple struct definition for the 64 Bit JSF Algorithm originally proposed by Bob Jenkins
 

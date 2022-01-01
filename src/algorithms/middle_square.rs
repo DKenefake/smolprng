@@ -1,7 +1,7 @@
 //! This module implments improved versions of the middle square algorithm
 
-use crate::{prng_setup, make_stream, make_default_stream, PRNG,  make_4_u64, AlgorithmOutput};
 use crate::smol_core::Algorithm;
+use crate::{make_4_u64, make_default_stream, make_stream, prng_setup, AlgorithmOutput, PRNG};
 
 /// This is the simple struct definition for the improved version of the middle squares algorithm
 /// this has very strong randomness properties and is very fast in the general setting.

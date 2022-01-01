@@ -2,8 +2,11 @@
 //!
 //!
 
-use crate::{prng_setup, make_stream, make_default_stream, PRNG, make_1_u32, make_1_u64, make_2_u64, make_4_u32, AlgorithmOutput};
 use crate::smol_core::Algorithm;
+use crate::{
+    make_1_u32, make_1_u64, make_2_u64, make_4_u32, make_default_stream, make_stream, prng_setup,
+    AlgorithmOutput, PRNG,
+};
 
 /// This is the struct definition for the XorShift32 algorithm
 pub struct XorShift32 {

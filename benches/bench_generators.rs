@@ -2,43 +2,52 @@
 #![feature(test)]
 extern crate test;
 
+use smolprng::{
+    JsfLarge, MiddleSquare, Sfc32, Sfc32Small, SplitMix32, SplitMix64, StepGenerator128,
+    StepGenerator16, StepGenerator32, StepGenerator64, StepGenerator8, XoShiro256Plus,
+    XoShiro256PlusPlus, XoShiro256SuperStar, XorShift128, XorShift128Plus, XorShift32, XorShift64,
+    XoroShiro128Plus, XoroShiro128PlusPlus, XoroShiro128SuperStar, LCG, PRNG,
+};
 use test::Bencher;
-use smolprng::{PRNG, JsfLarge, LCG, Sfc32Small, XoroShiro128SuperStar, XoroShiro128PlusPlus, XoroShiro128Plus, XorShift32, XorShift128Plus, XoShiro256PlusPlus, XoShiro256Plus, XoShiro256SuperStar, XorShift64, XorShift128, StepGenerator128, StepGenerator64, StepGenerator32, StepGenerator16, StepGenerator8, SplitMix64, SplitMix32, Sfc32, MiddleSquare};
 
 ///Default test it to generate 1kB of random bits using 64 bit generator
 
-macro_rules! bench_maker_1024_byte_by_64_byte{
-    ($fn_name:ident, $generator_type:ident)=>{
+macro_rules! bench_maker_1024_byte_by_64_byte {
+    ($fn_name:ident, $generator_type:ident) => {
         #[bench]
-        fn $fn_name(b:&mut Bencher){
-            let mut buffer = [0u64;SIZE];
-            let mut prng = PRNG{generator:$generator_type::default()};
-            const SIZE:usize = 128;
+        fn $fn_name(b: &mut Bencher) {
+            let mut buffer = [0u64; SIZE];
+            let mut prng = PRNG {
+                generator: $generator_type::default(),
+            };
+            const SIZE: usize = 128;
             b.iter(|| {
-                for i in 0..SIZE{
+                for i in 0..SIZE {
                     buffer[i] = prng.gen_u64();
                 }
             })
         }
-    }
+    };
 }
 
-macro_rules! bench_maker_1_000_00_f64{
-    ($fn_name:ident, $generator_type:ident)=>{
+macro_rules! bench_maker_1_000_00_f64 {
+    ($fn_name:ident, $generator_type:ident) => {
         #[bench]
-        fn $fn_name(b:&mut Bencher){
-            let mut prng = PRNG{generator:$generator_type::default()};
-            const SIZE:usize = 1_000_000;
+        fn $fn_name(b: &mut Bencher) {
+            let mut prng = PRNG {
+                generator: $generator_type::default(),
+            };
+            const SIZE: usize = 1_000_000;
             let mut buffer = 0f64;
 
             b.iter(|| {
-                for _i in 0..SIZE{
+                for _i in 0..SIZE {
                     buffer += prng.gen_f64();
                 }
                 buffer = 0f64;
             })
         }
-    }
+    };
 }
 
 bench_maker_1024_byte_by_64_byte! {bench_1024_bytes_jsf_large, JsfLarge}
@@ -68,8 +77,6 @@ bench_maker_1024_byte_by_64_byte! {bench_1024_bytes_xoshiro_256_plus_plus, XoShi
 bench_maker_1024_byte_by_64_byte! {bench_1024_bytes_xoshiro_256_plus, XoShiro256Plus}
 bench_maker_1024_byte_by_64_byte! {bench_1024_bytes_xoshiro_256_super_star, XoShiro256SuperStar}
 
-
-
 bench_maker_1_000_00_f64! {bench_1m_fp64_jsf_large, JsfLarge}
 bench_maker_1_000_00_f64! {bench_1m_fp64_lcg, LCG}
 bench_maker_1_000_00_f64! {bench_1m_fp64_middle_square, MiddleSquare}
@@ -96,4 +103,3 @@ bench_maker_1_000_00_f64! {bench_1m_fp64_xorshift_128_plus, XorShift128Plus}
 bench_maker_1_000_00_f64! {bench_1m_fp64_xoshiro_256_plus_plus, XoShiro256PlusPlus}
 bench_maker_1_000_00_f64! {bench_1m_fp64_xoshiro_256_plus, XoShiro256Plus}
 bench_maker_1_000_00_f64! {bench_1m_fp64_xoshiro_256_super_star, XoShiro256SuperStar}
-

@@ -1,7 +1,7 @@
 //! This module implments the LCG family of PRNG generators
 
-use crate::{prng_setup, make_stream, make_default_stream, PRNG, make_1_u64, AlgorithmOutput};
 use crate::smol_core::Algorithm;
+use crate::{make_1_u64, make_default_stream, make_stream, prng_setup, AlgorithmOutput, PRNG};
 
 /// This is the simple struct definition for the 64 Bit Linear Congruential Generator (LCG) algorithm, with parameters as definied by Knuth
 ///

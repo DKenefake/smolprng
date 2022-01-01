@@ -1,7 +1,9 @@
 //! The module contains the Definitions for the SplitMix Algorithm
 
-use crate::{prng_setup, make_stream, make_default_stream, PRNG, make_2_u64, make_1_u64, AlgorithmOutput};
 use crate::smol_core::Algorithm;
+use crate::{
+    make_1_u64, make_2_u64, make_default_stream, make_stream, prng_setup, AlgorithmOutput, PRNG,
+};
 
 /// Simple struct definition of the SplitMix32 Algorithm propsed by Guy Steele et al.
 /// original C source code can be found [here](http://wwwlgis.informatik.uni-kl.de/cms/fileadmin/publications/2020/thesis.pdf).
@@ -12,7 +14,7 @@ pub struct SplitMix32 {
 }
 
 ///Simple struct definition of the SplitMix64 Algorithm
-pub struct SplitMix64{
+pub struct SplitMix64 {
     pub(crate) data: u64,
 }
 
@@ -43,9 +45,12 @@ impl Algorithm for SplitMix64 {
     fn gen(&mut self) -> Self::Output {
         self.data = self.data.overflowing_add(0x9E3779B97f4A7C15u64).0;
         let mut result = self.data;
-        result = (result^(result >> 30)).overflowing_mul(0xBF58476D1CE4E5B9u64).0;
-        result = (result^(result >> 27)).overflowing_mul(0x94D049BB133111EBu64).0;
-        result^(result >> 31)
-
+        result = (result ^ (result >> 30))
+            .overflowing_mul(0xBF58476D1CE4E5B9u64)
+            .0;
+        result = (result ^ (result >> 27))
+            .overflowing_mul(0x94D049BB133111EBu64)
+            .0;
+        result ^ (result >> 31)
     }
 }
