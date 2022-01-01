@@ -5,7 +5,8 @@ use std::ops::{BitAnd, BitOrAssign, Shl};
 /// PRNG is the central pseudo-random number generating front end.
 /// This is the front end for the enture package.
 pub struct PRNG<T: Algorithm> {
-    pub(crate) generator: T,
+    /// The algorithm that is inserted to the generator
+    pub generator: T,
 }
 
 /// This is the central algorithm trait that is implemented bt the generators of the package
@@ -104,7 +105,9 @@ macro_rules! make_gen {
 ///
 /// Can be used in the following ways.
 /// ```rust
-/// let prng = PRNG{generator: JsfGenerator::default()};
+/// use smolprng::JsfLarge;
+/// use smolprng::PRNG;
+/// let mut prng = PRNG{generator: JsfLarge::default()};
 ///
 ///let rand_bool = prng.gen_bool(); // Generates a random bool
 ///
