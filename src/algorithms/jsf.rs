@@ -32,7 +32,8 @@ impl Algorithm for JsfLarge {
     ///     return x->d;
     ///}
     /// ```
-
+    ///
+    #[inline(always)]
     fn gen(&mut self) -> u64 {
         assert!(3 <= self.data.len());
 

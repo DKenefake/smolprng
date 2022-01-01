@@ -26,7 +26,7 @@ prng_setup! {XoShiro256Plus, XoShiro256Plus,data, make_4_u64}
 
 impl Algorithm for XoShiro256SuperStar {
     type Output = u64;
-
+    #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         let result = self.data[1]
             .overflowing_mul(5)
@@ -49,7 +49,7 @@ impl Algorithm for XoShiro256SuperStar {
 
 impl Algorithm for XoShiro256Plus {
     type Output = u64;
-
+    #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         let result = self.data[0].overflowing_add(self.data[3]).0;
         let t = self.data[1].overflowing_shl(17).0;
@@ -67,7 +67,7 @@ impl Algorithm for XoShiro256Plus {
 
 impl Algorithm for XoShiro256PlusPlus {
     type Output = u64;
-
+    #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         let result = (self.data[0].overflowing_add(self.data[0]).0)
             .rotate_left(23)

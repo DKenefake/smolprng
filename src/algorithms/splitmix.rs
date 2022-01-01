@@ -23,7 +23,7 @@ prng_setup! {SplitMix64, SplitMix64,data, make_1_u64}
 
 impl Algorithm for SplitMix32 {
     type Output = u32;
-
+    #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         //essential for prng quality
         self.data[1] |= 1;
@@ -41,7 +41,7 @@ impl Algorithm for SplitMix32 {
 
 impl Algorithm for SplitMix64 {
     type Output = u64;
-
+    #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         self.data = self.data.overflowing_add(0x9E3779B97f4A7C15u64).0;
         let mut result = self.data;

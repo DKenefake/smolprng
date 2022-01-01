@@ -24,6 +24,7 @@ impl Algorithm for LCG {
     /// let m = 2862933555777941757u64;
     /// let a = 1013904243u64;
     /// ```
+    #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         let m = 2862933555777941757u64;
         let a = 1013904243u64;

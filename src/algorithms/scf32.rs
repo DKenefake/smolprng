@@ -27,7 +27,7 @@ prng_setup! {Sfc32Small, Sfc32Small,data, make_1_u32}
 
 impl Algorithm for Sfc32 {
     type Output = u32;
-
+    #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         self.data[3] = self.data[3].overflowing_add(1).0;
         let t = self.data[0]
@@ -46,7 +46,7 @@ impl Algorithm for Sfc32 {
 
 impl Algorithm for Sfc32Small {
     type Output = u32;
-
+    #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         self.data = self.data.overflowing_add(0x9e3779b9u32).0;
         let mut z = self.data;

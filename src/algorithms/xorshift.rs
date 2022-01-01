@@ -37,7 +37,7 @@ prng_setup! {XorShift128Plus, XorShift128Plus,data, make_2_u64}
 
 impl Algorithm for XorShift32 {
     type Output = u32;
-
+    #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         let mut x = self.data;
         x ^= x.overflowing_shl(13).0;
@@ -50,7 +50,7 @@ impl Algorithm for XorShift32 {
 
 impl Algorithm for XorShift64 {
     type Output = u64;
-
+    #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         let mut x = self.data;
         x ^= x.overflowing_shl(13).0;
@@ -63,7 +63,7 @@ impl Algorithm for XorShift64 {
 
 impl Algorithm for XorShift128 {
     type Output = u32;
-
+    #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         let mut t = self.data[3];
         let s_ = self.data[0];
@@ -82,7 +82,7 @@ impl Algorithm for XorShift128 {
 
 impl Algorithm for XorShift128Plus {
     type Output = u64;
-
+    #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         let mut s1 = self.data[0];
         let s0 = self.data[1];

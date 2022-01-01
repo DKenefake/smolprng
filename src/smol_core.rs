@@ -86,6 +86,7 @@ algorithm_output! { u8 u16 u32 u64 u128 }
 macro_rules! make_gen {
     ($fn_name:ident, $output:ty, $gen_from:ident, $cast_to:ident) => {
         /// generates a random unsigned integer of appropriate type from algorithm output
+        #[inline(always)]
         pub fn $fn_name(&mut self) -> $output {
             assert!(T::Output::SIZE.count_ones() == 1);
             const N_SIZE: usize = std::mem::size_of::<$output>();
@@ -126,11 +127,13 @@ macro_rules! make_gen {
 ///
 impl<T: Algorithm> PRNG<T> {
     ///Generates a random bool based on Algorithm output
+    #[inline(always)]
     pub fn gen_bool(&mut self) -> bool {
         self.generator.gen().get_low()
     }
 
     ///Generates a random ``u8`` based on Algorithm output
+    #[inline(always)]
     pub fn gen_u8(&mut self) -> u8 {
         assert!(T::Output::SIZE.count_ones() == 1);
         let val = self.generator.gen();
@@ -147,12 +150,14 @@ impl<T: Algorithm> PRNG<T> {
     make_gen! {gen_u128, u128, gen_u64, cast_to_u128}
 
     ///Generates a random ``f64`` uniformly distributed on [0,1)
+    #[inline(always)]
     pub fn gen_f64(&mut self) -> f64 {
         let val = 0x3FFu64 << 52 | self.gen_u64() >> 12;
         f64::from_bits(val) - 1.0f64
     }
 
     ///Generates a random ``f32`` uniformly distributed on [0,1)
+    #[inline(always)]
     pub fn gen_f32(&mut self) -> f32 {
         let val = 0x1FFu32 | self.gen_u32() >> 9;
         f32::from_bits(val) - 1.0f32

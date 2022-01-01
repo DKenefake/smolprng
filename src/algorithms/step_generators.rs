@@ -17,6 +17,7 @@ macro_rules! make_step {
         impl Algorithm for $name {
             type Output = $typing;
 
+            #[inline(always)]
             fn gen(&mut self) -> Self::Output {
                 self.data = self.data.overflowing_add(1).0;
                 self.data

@@ -16,6 +16,7 @@ prng_setup! {MiddleSquare, MiddleSquare,data, make_4_u64}
 impl Algorithm for MiddleSquare {
     type Output = u32;
 
+    #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         let mut x = self.data[0];
         let mut w = self.data[1];

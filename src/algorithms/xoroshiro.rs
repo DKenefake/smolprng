@@ -29,7 +29,7 @@ prng_setup! {XoroShiro128Plus, XoroShiro128Plus,data, make_2_u64}
 
 impl Algorithm for XoroShiro128PlusPlus {
     type Output = u32;
-
+    #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         let result = self.data[0]
             .overflowing_add(self.data[3])
@@ -53,7 +53,7 @@ impl Algorithm for XoroShiro128PlusPlus {
 
 impl Algorithm for XoroShiro128SuperStar {
     type Output = u64;
-
+    #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         let s0 = self.data[0];
         let mut s1 = self.data[1];
@@ -67,7 +67,7 @@ impl Algorithm for XoroShiro128SuperStar {
 
 impl Algorithm for XoroShiro128Plus {
     type Output = u64;
-
+    #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         let s0 = self.data[0];
         let mut s1 = self.data[1];
