@@ -2,38 +2,35 @@
 //!
 //!
 
-use crate::prng_iter;
-use crate::smol_core;
+use crate::{prng_setup, make_stream, make_default_stream, PRNG, make_1_u32, make_1_u64, make_2_u64, make_4_u32, AlgorithmOutput};
 use crate::smol_core::Algorithm;
 
 /// This is the struct definition for the XorShift32 algorithm
-#[derive(Default)]
 pub struct XorShift32 {
     pub(crate) data: u32,
 }
+prng_setup! {XorShift32, XorShift32,data, make_1_u32}
 
 /// This is the struct definition for the XorShift64 algorithm
-#[derive(Default)]
 pub struct XorShift64 {
     pub(crate) data: u64,
 }
 
+prng_setup! {XorShift64, XorShift64,data, make_1_u64}
+
 /// This is the struct definition for the XorShift128 algorithm
-#[derive(Default)]
+
 pub struct XorShift128 {
     pub(crate) data: [u32; 4],
 }
+prng_setup! {XorShift128, XorShift128,data, make_4_u32}
 
 /// This is the struct definition for the XorShift128+ algorithm
-#[derive(Default)]
 pub struct XorShift128Plus {
     pub(crate) data: [u64; 2],
 }
 
-prng_iter! {XorShift32}
-prng_iter! {XorShift64}
-prng_iter! {XorShift128}
-prng_iter! {XorShift128Plus}
+prng_setup! {XorShift128Plus, XorShift128Plus,data, make_2_u64}
 
 impl Algorithm for XorShift32 {
     type Output = u32;

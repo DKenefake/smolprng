@@ -2,32 +2,29 @@
 //!
 //!
 
-use crate::prng_iter;
-use crate::smol_core;
+use crate::{prng_setup, make_stream, make_default_stream, PRNG, make_4_u32, make_2_u64, AlgorithmOutput};
 use crate::smol_core::Algorithm;
 
+
 ///This is the simple struct definition for the Xoroshiro128++ algorithm
-#[derive(Default)]
 pub struct XoroShiro128PlusPlus{
     pub(crate) data: [u32; 4],
 }
+prng_setup! {XoroShiro128PlusPlus, XoroShiro128PlusPlus,data, make_4_u32}
 
 ///This is the simple struct definition for the Xoroshiro128** algorithm
-#[derive(Default)]
 pub struct XoroShiro128SuperStar{
     pub(crate) data: [u64; 2],
 }
+prng_setup! {XoroShiro128SuperStar, XoroShiro128SuperStar,data, make_2_u64}
 
 ///This is the simple struct definition for the Xoroshiro128+ algorithm
 /// This should only be used to generate floting point numbers and literally nothing else
-#[derive(Default)]
+
 pub struct XoroShiro128Plus{
     pub(crate) data: [u64;2],
 }
-
-prng_iter!{XoroShiro128PlusPlus}
-prng_iter!{XoroShiro128SuperStar}
-prng_iter!{XoroShiro128Plus}
+prng_setup! {XoroShiro128Plus, XoroShiro128Plus,data, make_2_u64}
 
 
 impl Algorithm for XoroShiro128PlusPlus {

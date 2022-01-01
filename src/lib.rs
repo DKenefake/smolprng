@@ -7,7 +7,7 @@ pub mod algorithms;
 pub mod smol_core;
 
 pub use algorithms::*;
-
+pub use smol_core::*;
 #[cfg(test)]
 mod tests {
     use crate::*;

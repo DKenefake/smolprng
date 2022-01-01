@@ -1,8 +1,8 @@
 //! This module impliments JSF type algorithms
 
-use crate::{prng_iter, SplitMix64};
-use crate::smol_core;
+use crate::{prng_setup,make_4_u64, PRNG, AlgorithmOutput, make_default_stream, make_stream};
 use crate::smol_core::Algorithm;
+
 
 /// This is the simple struct definition for the 64 Bit JSF Algorithm originally proposed by Bob Jenkins
 
@@ -10,14 +10,7 @@ pub struct JsfLarge {
     pub(crate) data: [u64; 4],
 }
 
-prng_iter! {JsfLarge}
-
-impl Default for JsfLarge {
-    fn default() -> Self {
-        let mut g = SplitMix64{data:0x43d0f2c5f0c7e0a5};
-        JsfLarge{data:[g.gen(), g.gen(),g.gen(),g.gen()]}
-    }
-}
+prng_setup! {JsfLarge, JsfLarge,data, make_4_u64}
 
 impl Algorithm for JsfLarge {
     type Output = u64;

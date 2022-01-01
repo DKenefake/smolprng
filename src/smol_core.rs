@@ -82,6 +82,8 @@ macro_rules! algorithm_output {
 
 algorithm_output! { u8 u16 u32 u64 u128 }
 
+
+
 /// This is a macro to generate the generation function for the following types ``u16``,``u32``,``u64``,``u128``,
 macro_rules! make_gen {
     ($fn_name:ident, $output:ty, $gen_from:ident, $cast_to:ident) => {

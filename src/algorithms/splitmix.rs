@@ -1,25 +1,23 @@
 //! The module contains the Definitions for the SplitMix Algorithm
 
-use crate::prng_iter;
-use crate::smol_core;
+use crate::{prng_setup, make_stream, make_default_stream, PRNG, make_2_u64, make_1_u64, AlgorithmOutput};
 use crate::smol_core::Algorithm;
 
 /// Simple struct definition of the SplitMix32 Algorithm propsed by Guy Steele et al.
 /// original C source code can be found [here](http://wwwlgis.informatik.uni-kl.de/cms/fileadmin/publications/2020/thesis.pdf).
 /// The C++ that this package is based on can be found [here](https://github.com/DKenefake/SmallPRNG/blob/master/prng.h).
-#[derive(Default)]
+
 pub struct SplitMix32 {
     pub(crate) data: [u64; 2],
 }
 
 ///Simple struct definition of the SplitMix64 Algorithm
-#[derive(Default)]
 pub struct SplitMix64{
     pub(crate) data: u64,
 }
 
-prng_iter! {SplitMix32}
-prng_iter! {SplitMix64}
+prng_setup! {SplitMix32, SplitMix32,data, make_2_u64}
+prng_setup! {SplitMix64, SplitMix64,data, make_1_u64}
 
 impl Algorithm for SplitMix32 {
     type Output = u32;
