@@ -13,7 +13,7 @@ To live up to the name of ``SmolPRNG`` there are less then 750 lines of code but
 - [x] Generate uniform ``f32``,``f64``
 - [x] Distributions (Normal, Integer Ranges, Bernoulli, ect)
 - [x] Easy seeding of algorithm states
-- [ ] Benchmarking
+- [x] Benchmarking
 - [ ] TestU01 Validation
 
 

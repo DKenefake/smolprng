@@ -180,4 +180,5 @@ mod tests {
         let xorshiro = XoroShiro128SuperStar::default();
         prng_gen!(xorshiro,false);
     }
+
 }
