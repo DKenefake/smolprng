@@ -13,7 +13,7 @@ SmolPRNG is performance competative to the Rand Rust crate and is much more stra
 - [x] PRNG Algorithms
 - [x] Generate unsigned ints
 - [x] Generate uniform ``f32``,``f64``
-- [x] Distributions (Normal, Integer Ranges, Bernoulli, ect)
+- [x] Distributions (Normal, Beta, Cauchy, Bernoulli, ect)
 - [x] Easy seeding of algorithm states
 - [x] Benchmarking
 - [ ] TestU01 Validation
@@ -41,7 +41,7 @@ let rand_f64 = prng.gen_f64();    //Generates a random f64
 
 ## Implement Your own algorithm
 
-Here is an example of injecting a new algorithm to generate pseudo-random nunmbers by ``impl`` the ``Algorithm`` trait on a struct. Availible ``Outputs`` are ``u8``,``u16``,``u32``,``u64``,``u128``.
+Here is an example of injecting a new algorithm to generate pseudo-random numbers by ``impl`` the ``Algorithm`` trait on a struct. Availible ``Outputs`` are ``u8``,``u16``,``u32``,``u64``,``u128``.
 
 ```rust
 struct StepGenerator{
@@ -64,6 +64,7 @@ prng_setup! {StepGenerator, StepGenerator, data, make_1_u32}
 Using this, we can then create a ``PRNG`` struct from 
 
 ```rust
-let gen_state = 12765u32; 
-let prng = PRNG{generator: StepGenerator{data: gen_state}}
+// create step generator state from output of SplitMix64 algorithm of a u32 seed
+let step_generator = StepGenerator::from(12765u32); 
+let prng = PRNG{generator: step_generator}
 ```
