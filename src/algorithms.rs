@@ -61,8 +61,8 @@ macro_rules! prng_setup {
 ///makes a data streamer from using some input data
 pub fn make_stream<T: AlgorithmOutput>(value: T) -> SplitMix64 {
     let data_feed = match T::SIZE > 8 {
-        false => 0x43d0f2c5f0c7e0a5 | value.cast_to_u64(),
-        true => 0x43d0f2c5f0c7e0a5 | (value >> ((T::SIZE - 8) * 8) as u8).cast_to_u64(),
+        false => 0x43d0f2c5f0c7e0a5 ^ value.cast_to_u64(),
+        true => 0x43d0f2c5f0c7e0a5 ^ (value >> ((T::SIZE - 8) * 8) as u8).cast_to_u64(),
     };
     SplitMix64 { data: data_feed }
 }
