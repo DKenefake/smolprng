@@ -30,11 +30,8 @@ impl Algorithm for Sfc32 {
     #[inline(always)]
     fn gen(&mut self) -> Self::Output {
         self.data[3] = self.data[3].overflowing_add(1).0;
-        let t = self.data[0]
-            .overflowing_add(self.data[1])
-            .0
-            .overflowing_add(self.data[2])
-            .0;
+        let t = self.data[0].overflowing_add(self.data[1]).0;
+        let t = t.overflowing_add(self.data[2]).0;
         self.data[0] ^= self.data[1] >> 9;
         self.data[1] ^= self.data[2].overflowing_shl(3).0;
         self.data[2] = (self.data[2].overflowing_shl(21).0 | (self.data[1] >> 11))

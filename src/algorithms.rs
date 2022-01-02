@@ -21,20 +21,6 @@ pub use xorshift::*;
 pub use xoshiro::*;
 
 use crate::{AlgorithmOutput, PRNG};
-///A macro that will add the implmentation of ``Iterator`` for a given PRNG
-#[macro_export]
-macro_rules! prng_iter {
-    ($algo_struct_name:ty) => {
-        ///Implements Iterator for the PRNG
-        impl Iterator for $algo_struct_name {
-            type Item = <$algo_struct_name as Algorithm>::Output;
-
-            fn next(&mut self) -> Option<Self::Item> {
-                Some(self.gen())
-            }
-        }
-    };
-}
 
 ///A macro that will write the streaming building for us
 #[macro_export]

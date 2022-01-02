@@ -45,12 +45,10 @@ impl Algorithm for SplitMix64 {
     fn gen(&mut self) -> Self::Output {
         self.data = self.data.overflowing_add(0x9E3779B97f4A7C15u64).0;
         let mut result = self.data;
-        result = (result ^ (result >> 30))
-            .overflowing_mul(0xBF58476D1CE4E5B9u64)
-            .0;
-        result = (result ^ (result >> 27))
-            .overflowing_mul(0x94D049BB133111EBu64)
-            .0;
+        result = result ^ (result >> 30);
+        result = result.overflowing_mul(0xBF58476D1CE4E5B9u64).0;
+        result = result ^ (result >> 27);
+        result = result.overflowing_mul(0x94D049BB133111EBu64).0;
         result ^ (result >> 31)
     }
 }
