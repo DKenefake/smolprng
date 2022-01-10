@@ -43,7 +43,7 @@ impl Algorithm for SplitMix64 {
     type Output = u64;
     #[inline(always)]
     fn gen(&mut self) -> Self::Output {
-        self.data = self.data.overflowing_add(0x9E3779B97f4A7C15u64).0;
+        self.data = self.data.overflowing_add(0x9E3779B97F4A7C15u64).0;
         let mut result = self.data;
         result = result ^ (result >> 30);
         result = result.overflowing_mul(0xBF58476D1CE4E5B9u64).0;
