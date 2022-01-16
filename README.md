@@ -69,3 +69,42 @@ Using this, we can then create a ``PRNG`` struct from
 let step_generator = StepGenerator::from(12765u32); 
 let prng = PRNG{generator: step_generator}
 ```
+
+## Performance 
+
+This is an overview of the performance of the package, running on an intel 12700k CPU. This is categorized as three different
+benchmarks, generating a 1024 byte buffer filled with random numbers, summing 1 million randomly generated ``f64`` and then 1 million
+generated ``f32``. The fastest Step generator result is used as a baseline, as this is the algorithm defined by adding 1 and returning state.
+It is the simplest possible algorithm other than the constant generator.
+
+
+This is not exhaustive but to cover the broad strokes of the performance characters.
+
+### Generating 1024 byte Buffer
+
+|                |  Time | Bandwidth |
+|----------------|:-----:|:---------:|
+| Step Generator |  49ns | 20.4 GB/s |
+| Xoshiro256+    |  87ns | 11.5 GB/s |
+| SplitMix64     |  92ns | 10.9 GB/s |
+| JSFLarge       | 105ns |  9.5 GB/s |
+
+
+### Summing 1 million randomly generated ``f32``
+
+|                |  Time   | Time per f32 |
+|----------------|:-------:|:------------:|
+| Step Generator | 0.28 ms |   0.28 ns    |
+| SCFSmall       | 0.51 ms |   0.51 ns    |
+| Xoshiro256+    | 0.61 ms |   0.61 ns    |
+| SplitMix64     | 0.65 ms |   0.65 ns    |
+| JSFLarge       | 0.83 ms |   0.83 ns    |
+
+### Summing 1 million randomly generated ``f64``
+
+|                |  Time   | Time per f64 |
+|----------------|:-------:|:------------:|
+| Step Generator | 0.32 ms |   0.32 ns    |
+| Xoshiro256+    | 0.62 ms |   0.62 ns    |
+| SplitMix64     | 0.63 ms |   0.63 ns    |
+| JSFLarge       | 0.79 ms |   0.79 ns    |
