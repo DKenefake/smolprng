@@ -10,6 +10,8 @@ use smolprng::{
 };
 use test::Bencher;
 
+use std::time::SystemTime;
+
 ///Default test it to generate 1kB of random bits using 64 bit generator
 
 macro_rules! bench_maker_1024_byte_by_64_byte {
@@ -17,8 +19,12 @@ macro_rules! bench_maker_1024_byte_by_64_byte {
         #[bench]
         fn $fn_name(b: &mut Bencher) {
             let mut buffer = [0u64; SIZE];
+            let a = SystemTime::now()
+                .duration_since(SystemTime::UNIX_EPOCH)
+                .unwrap()
+                .as_secs();
             let mut prng = PRNG {
-                generator: $generator_type::default(),
+                generator: $generator_type::from(a),
             };
             const SIZE: usize = 128;
             b.iter(|| {

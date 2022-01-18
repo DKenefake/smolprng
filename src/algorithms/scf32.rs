@@ -1,11 +1,11 @@
-//! This module contains the implmentations for the SFC family of PRNG algorithms
+//! This module contains the implementations for the `SFC32` family of PRNG algorithms
 
 use crate::smol_core::Algorithm;
 use crate::{
     make_1_u32, make_4_u32, make_default_stream, make_stream, prng_setup, AlgorithmOutput, PRNG,
 };
 
-/// Simple struct definition for the SFC32 algorithm
+/// Simple struct definition for the `SFC32` algorithm
 /// The translated tree is C -> C++ -> Rust. The original source can be found
 /// [here](http://wwwlgis.informatik.uni-kl.de/cms/fileadmin/publications/2020/thesis.pdf)
 
@@ -15,7 +15,7 @@ pub struct Sfc32 {
 
 prng_setup! {Sfc32, Sfc32,data, make_4_u32}
 
-/// Simple struct definition for the SFC32_Small algorithm
+/// Simple struct definition for the `Sfc32Small` algorithm
 /// The translated tree is C -> C++ -> Rust. The original source can be found
 /// [here](http://wwwlgis.informatik.uni-kl.de/cms/fileadmin/publications/2020/thesis.pdf)
 
