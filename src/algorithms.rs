@@ -68,7 +68,7 @@ pub fn make_stream<T: AlgorithmOutput>(value: T) -> SplitMix64 {
 }
 
 ///makes the default data streamer
-pub fn make_default_stream() -> SplitMix64 {
+pub const fn make_default_stream() -> SplitMix64 {
     SplitMix64 {
         data: 0x43d0f2c5f0c7e0a5,
     }

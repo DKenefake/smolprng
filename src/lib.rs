@@ -1,7 +1,18 @@
 #![crate_name = "smolprng"]
 #![warn(missing_docs)]
 #![forbid(unsafe_code)]
-//! This is a PRNG Package SmolPRNG a small Rust package for pseudo-random  number generation
+#![warn(clippy::all, clippy::pedantic, clippy::nursery, clippy::cargo)]
+#![allow(clippy::implicit_return)]
+#![allow(clippy::float_arithmetic)]
+#![allow(clippy::inline_always)]
+#![allow(clippy::suboptimal_flops)]
+#![allow(clippy::use_self)]
+#![allow(clippy::must_use_candidate)]
+#![allow(clippy::cast_possible_truncation)]
+#![allow(clippy::items_after_statements)]
+#![allow(clippy::unreadable_literal)]
+
+//! This is a PRNG Package `SmolPRNG` a small Rust package for pseudo-random  number generation
 //!
 // mod algorithms::jsf;
 pub mod algorithms;

@@ -1,4 +1,4 @@
-//! This is the central module in the SmolPRNG crate, as this is where the definitions of PRNG, Algorithm, and AlgorithmOutput reside
+//! This is the central module in the `SmolPRNG` crate, as this is where the definitions of `PRNG`, `Algorithm`, and `AlgorithmOutput` reside
 
 use std::f64::consts::E;
 use std::ops::{BitAnd, BitOrAssign, Shl};
@@ -45,7 +45,7 @@ pub trait AlgorithmOutput:
     fn get_low(self) -> bool;
 }
 
-/// This is a macro that implements the AlgorithmOutput trait for all primitive unsigned integers
+/// This is a macro that implements the `AlgorithmOutput` trait for all primitive unsigned integers
 macro_rules! algorithm_output {
     ($($t:ty) +) => {
         $(
@@ -135,7 +135,6 @@ impl<T: Algorithm> PRNG<T> {
     ///Generates a random ``u8`` based on Algorithm output
     #[inline(always)]
     pub fn gen_u8(&mut self) -> u8 {
-        assert!(T::Output::SIZE.count_ones() == 1);
         let val = self.generator.gen();
         let r_shift = (T::Output::SIZE as u8 - 1) * 8;
         (val >> r_shift).cast_to_u8()
@@ -171,18 +170,19 @@ impl<T: Algorithm> PRNG<T> {
         while s >= 1f64 || s == 0f64 {
             u = self.gen_f64() * 2.0 - 1.0;
             let v = self.gen_f64() * 2.0 - 1.0;
-            s = u * u + v * s;
+            s = u * u + v * v;
         }
 
-        s = (-2f64 * (s.log(E)) / s).sqrt();
+        s = (-2f64 * (s.ln()) / s).sqrt();
         u * s
     }
 
     ///Samples a bernoulli distribution with B(p)
     pub fn bernoulli(&mut self, p: f64) -> u64 {
-        match p > self.gen_f64() {
-            true => 1,
-            false => 0,
+        if p > self.gen_f64() {
+            1
+        } else {
+            0
         }
     }
 
@@ -243,7 +243,7 @@ impl<T: Algorithm> PRNG<T> {
 
             v = v * v * v;
 
-            if v > 0f64 && u.log(E) < 0.5 * x * x + d - d * v + d * v.log(E) {
+            if v > 0f64 && u.ln() < 0.5 * x * x + d - d * v + d * v.ln() {
                 return d * v * beta;
             }
         }
@@ -267,7 +267,7 @@ impl<T: Algorithm> PRNG<T> {
     /// Samples a exponential distribution
     /// Direct inversion of CDF
     pub fn exponential(&mut self, lambda: f64) -> f64 {
-        -self.gen_f64().log(E) / lambda
+        -self.gen_f64().ln() / lambda
     }
 
     /// Samples a log normal distribution
@@ -280,7 +280,7 @@ impl<T: Algorithm> PRNG<T> {
     ///
     pub fn logistic(&mut self, mu: f64, beta: f64) -> f64 {
         let x = self.gen_f64();
-        mu + beta * ((x / (1.0 - x)).log(E))
+        mu + beta * ((x / (1.0 - x)).ln())
     }
 
     /// Samples a fischer distribution
@@ -311,7 +311,7 @@ impl<T: Algorithm> PRNG<T> {
             n += 1;
             prod *= l;
             denom *= n as f64;
-            sum += prod / denom
+            sum += prod / denom;
         }
 
         n + m

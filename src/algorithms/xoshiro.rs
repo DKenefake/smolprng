@@ -1,23 +1,23 @@
-//! This is the general module for implmentation of XoShiro type algorithms
+//! This is the general module for implmentation of `XoShiro` type algorithms
 //! Te Implmentations are primarilly based on translations of the C code from [Prof. Vigna](https://prng.di.unimi.it/).
 
 use crate::smol_core::Algorithm;
 use crate::{make_4_u64, make_default_stream, make_stream, prng_setup, AlgorithmOutput, PRNG};
 
-/// This is the struct definition for the state of the XoShiro256** algorithm
+/// This is the struct definition for the state of the `XoShiro256SuperStar` algorithm
 pub struct XoShiro256SuperStar {
     pub(crate) data: [u64; 4],
 }
 prng_setup! {XoShiro256SuperStar, XoShiro256SuperStar,data, make_4_u64}
 
-/// This is the struct definition of the state of Xoshiro256++ algorithm
+/// This is the struct definition of the state of `XoShiro256PlusPlus` algorithm
 pub struct XoShiro256PlusPlus {
     pub(crate) data: [u64; 4],
 }
 
 prng_setup! {XoShiro256PlusPlus, XoShiro256PlusPlus,data, make_4_u64}
 
-/// This is the struct definition of the state of Xoshiro256+ algorithm
+/// This is the struct definition of the state of `XoShiro256Plus` algorithm
 pub struct XoShiro256Plus {
     pub(crate) data: [u64; 4],
 }

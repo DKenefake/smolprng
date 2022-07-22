@@ -1,4 +1,4 @@
-//! This module implements the XoroShiro type algorithms
+//! This module implements the `XoroShiro` type algorithms
 //!
 //!
 
@@ -7,20 +7,20 @@ use crate::{
     make_2_u64, make_4_u32, make_default_stream, make_stream, prng_setup, AlgorithmOutput, PRNG,
 };
 
-///This is the simple struct definition for the Xoroshiro128++ algorithm
+///This is the simple struct definition for the `XoroShiro128PlusPlus` algorithm
 pub struct XoroShiro128PlusPlus {
     pub(crate) data: [u32; 4],
 }
 prng_setup! {XoroShiro128PlusPlus, XoroShiro128PlusPlus,data, make_4_u32}
 
-///This is the simple struct definition for the Xoroshiro128** algorithm
+///This is the simple struct definition for the `XoroShiro128SuperStar` algorithm
 pub struct XoroShiro128SuperStar {
     pub(crate) data: [u64; 2],
 }
 prng_setup! {XoroShiro128SuperStar, XoroShiro128SuperStar,data, make_2_u64}
 
-///This is the simple struct definition for the Xoroshiro128+ algorithm
-/// This should only be used to generate floting point numbers and literally nothing else
+///This is the simple struct definition for the `XoroShiro128Plus` algorithm
+/// This should only be used to generate floating point numbers and literally nothing else
 
 pub struct XoroShiro128Plus {
     pub(crate) data: [u64; 2],

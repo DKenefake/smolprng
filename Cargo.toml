@@ -1,6 +1,6 @@
 [package]
 name = "smolprng"
-version = "0.1.2"
+version = "0.1.4"
 edition = "2021"
 authors = ["Dustin Kenefake"]
 license = "BSD-3-Clause"
@@ -16,10 +16,10 @@ opt-level = 3
 debug = false
 debug-assertions = false
 overflow-checks = false
-lto = false
-panic = 'unwind'
+lto = "fat"
+panic = 'abort'
 incremental = false
-codegen-units = 16
+codegen-units = 1
 rpath = false
 
 [profile.bench]
@@ -28,6 +28,9 @@ debug = false
 debug-assertions = false
 overflow-checks = false
 lto = false
+panic = "unwind"
 incremental = false
-codegen-units = 16
+codegen-units = 1
 rpath = false
+
+
