@@ -163,7 +163,8 @@ impl<T: Algorithm> PRNG<T> {
         f32::from_bits(val) - 1.0f32
     }
 
-    ///Samples a normal distribution N(0,1) for 1 sample
+    /// Samples a normal distribution N(0,1) for 1 sample
+    /// Algorithm from "A Note on the Generation of Random Normal Deviates" - G. E. P. Box, Mervin E. Muller The Annals of Mathematical Statistics 1958
     pub fn normal(&mut self) -> f64 {
         let (mut u, mut s) = (0f64, 0f64);
 
@@ -195,11 +196,38 @@ impl<T: Algorithm> PRNG<T> {
     }
 
     ///Samples a Cauchy Distribution
+    /// Algorithm based on the fact that X~N(0,1) & Y~N(0,1) have  X/Y~C(0,1)
     pub fn cauchy(&mut self) -> f64 {
         self.normal() / self.normal()
     }
 
-    ///Samples a Gamma Distribution with Γ(α,ß)
+    ///Samples the student t distribution
+    /// Algorithm From "Polar generation of random variates with the t-Distibution" - Ralph W. Bailey Mathematics of Computation 1994
+    /// DOI: https://doi.org/10.2307/2153537
+    pub fn student_t(&mut self, nu:f64)-> f64{
+
+        let (mut u, mut v, mut w) = (0f64, 0f64, 0f64);
+
+        while w > 1f64{
+            u = self.gen_f64()*2f64 - 1f64;
+            v = self.gen_f64()*2f64 - 1f64;
+            w = u*u+v*v;
+        }
+
+        let c = u*u / w;
+        let r = nu*(w.powf(-2f64/v)-1f64);
+        let p_res = (c*c*r*r).sqrt();
+
+        match self.gen_bool() {
+            true => p_res,
+            false => -p_res
+        }
+
+    }
+
+    /// Samples a Gamma Distribution with Γ(α,ß)
+    /// Algorithm from "A simple method for generating gamma variables" - George Marsaglia, Wai Wan Tsang ACM Transactions on  Mathematical Software 2000
+    /// DOI: https://doi.org/10.1145/358407.358414
     pub fn gamma(&mut self, alpha: f64, beta: f64) -> f64 {
         if alpha <= 1f64 {
             return self.gamma(alpha + 1.0, beta) * (self.gen_f64().powf(1f64 / alpha));
@@ -222,41 +250,47 @@ impl<T: Algorithm> PRNG<T> {
     }
 
     /// Samples a Chi square distribution with nu degrees of freedom
+    /// Based on relating chi squared distirubtion to the gamma distribution
+    /// Y ~ Y(nu) <==> Y ~ gamma(0.5 nu, 2)
     pub fn chi_squared(&mut self, nu: f64) -> f64 {
         self.gamma(0.5 * nu, 2.0)
     }
 
     /// Samples a beta distribution
+    /// Given X ~ gamma(alpha, 1) and Y ~ gamma(beta, 1) then X/(X+Y) ~ beta(alpha, beta)
     pub fn beta(&mut self, alpha: f64, beta: f64) -> f64 {
         let x = self.gamma(alpha, 1f64);
         let y = self.gamma(beta, 1f64);
         x / (x + y)
     }
 
-    ///Samples a exponential distribution
+    /// Samples a exponential distribution
+    /// Direct inversion of CDF
     pub fn exponential(&mut self, lambda: f64) -> f64 {
         -self.gen_f64().log(E) / lambda
     }
 
-    ///samples a log nromal distribution
+    /// Samples a log normal distribution
+    /// by definition
     pub fn lognormal(&mut self) -> f64 {
         self.normal().exp()
     }
 
-    ///samples a logistic distribution
+    /// Samples a logistic distribution
+    ///
     pub fn logistic(&mut self, mu: f64, beta: f64) -> f64 {
         let x = self.gen_f64();
         mu + beta * ((x / (1.0 - x)).log(E))
     }
 
-    ///samples a fischer distribution
+    /// Samples a fischer distribution
     pub fn fischer(&mut self, d1: f64, d2: f64) -> f64 {
         let x_1 = self.chi_squared(d1);
         let x_2 = self.chi_squared(d1);
         (x_1 / d1) / (x_2 / d2)
     }
 
-    ///samples a poisson distribution
+    /// Samples a poisson distribution
     pub fn poisson(&mut self, l: f64) -> u64 {
         let mut n = 0;
         let mut m = 0;
@@ -283,7 +317,8 @@ impl<T: Algorithm> PRNG<T> {
         n + m
     }
 
-    ///samples a negative binomial distribution
+    /// Samples a negative binomial distribution
+    /// Relation between negative binaomial and gamma, then gamma to poisson
     pub fn negative_binomial(&mut self, r: f64, p: f64) -> u64 {
         let lambda = self.gamma(r, p / (1.0 - p));
         self.poisson(lambda)

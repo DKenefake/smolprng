@@ -12,7 +12,6 @@ pub use smol_core::*;
 #[cfg(test)]
 mod tests {
     use crate::*;
-    use std::ops::Add;
 
     macro_rules! prng_gen {
         ($generator:ident, $generator_type:ty, $dist_run:expr) => {
