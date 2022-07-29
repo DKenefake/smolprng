@@ -166,7 +166,7 @@ impl<T: Algorithm> PRNG<T> {
     /// Algorithm from "A Note on the Generation of Random Normal Deviates" - G. E. P. Box, Mervin E. Muller The Annals of Mathematical Statistics 1958
     pub fn normal(&mut self) -> f64 {
         let (u, v) = self.disc2d();
-        let s = u*u + v*v;
+        let s = u * u + v * v;
         u * (-2f64 * (s.ln()) / s).sqrt()
     }
 
@@ -191,22 +191,26 @@ impl<T: Algorithm> PRNG<T> {
     /// Samples a Cauchy Distribution
     /// Based on direct inversion of CDF
     pub fn cauchy(&mut self) -> f64 {
-        (PI*(self.gen_f64() - 0.5f64)).tan()
+        (PI * (self.gen_f64() - 0.5f64)).tan()
     }
 
     /// Samples the student t distribution
     /// Algorithm From "Polar generation of random variates with the t-Distibution" - Ralph W. Bailey Mathematics of Computation 1994
     /// DOI: <https://doi.org/10.2307/2153537/>
-    pub fn student_t(&mut self, nu:f64)-> f64{
+    pub fn student_t(&mut self, nu: f64) -> f64 {
         let (u, v) = self.disc2d();
 
-        let w = u*u + v*v;
+        let w = u * u + v * v;
 
-        let c = u*u / w;
-        let r = nu*(w.powf(-2f64/v)-1f64);
-        let p_res = (c*c*r*r).sqrt();
+        let c = u * u / w;
+        let r = nu * (w.powf(-2f64 / v) - 1f64);
+        let p_res = (c * c * r * r).sqrt();
 
-        if self.gen_bool() {p_res} else {-p_res}
+        if self.gen_bool() {
+            p_res
+        } else {
+            -p_res
+        }
     }
 
     /// Samples a Gamma Distribution with Γ(α,ß)
@@ -314,14 +318,13 @@ impl<T: Algorithm> PRNG<T> {
     /// Samples the 2D Disc
     /// Via rejection sampling
     #[inline(always)]
-    pub fn disc2d(&mut self)-> (f64, f64){
+    pub fn disc2d(&mut self) -> (f64, f64) {
         loop {
-            let u = self.gen_f64()*2f64 - 1f64;
-            let v = self.gen_f64()*2f64 - 1f64;
-            if u*u + v*v <= 1f64{
-                return (u,v)
+            let u = self.gen_f64() * 2f64 - 1f64;
+            let v = self.gen_f64() * 2f64 - 1f64;
+            if u * u + v * v <= 1f64 {
+                return (u, v);
             }
         }
     }
-
 }
