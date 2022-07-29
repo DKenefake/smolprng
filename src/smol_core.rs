@@ -1,6 +1,6 @@
 //! This is the central module in the `SmolPRNG` crate, as this is where the definitions of `PRNG`, `Algorithm`, and `AlgorithmOutput` reside
 
-use std::f64::consts::E;
+use std::f64::consts::{E, PI};
 use std::ops::{BitAnd, BitOrAssign, Shl};
 
 /// PRNG is the central pseudo-random number generating front end.
@@ -165,16 +165,9 @@ impl<T: Algorithm> PRNG<T> {
     /// Samples a normal distribution N(0,1) for 1 sample
     /// Algorithm from "A Note on the Generation of Random Normal Deviates" - G. E. P. Box, Mervin E. Muller The Annals of Mathematical Statistics 1958
     pub fn normal(&mut self) -> f64 {
-        let (mut u, mut s) = (0f64, 0f64);
-
-        while s >= 1f64 || s == 0f64 {
-            u = self.gen_f64() * 2.0 - 1.0;
-            let v = self.gen_f64() * 2.0 - 1.0;
-            s = u * u + v * v;
-        }
-
-        s = (-2f64 * (s.ln()) / s).sqrt();
-        u * s
+        let (u, v) = self.disc2d();
+        let s = u*u + v*v;
+        u * (-2f64 * (s.ln()) / s).sqrt()
     }
 
     ///Samples a bernoulli distribution with B(p)
@@ -195,39 +188,30 @@ impl<T: Algorithm> PRNG<T> {
         count
     }
 
-    ///Samples a Cauchy Distribution
-    /// Algorithm based on the fact that X~N(0,1) & Y~N(0,1) have  X/Y~C(0,1)
+    /// Samples a Cauchy Distribution
+    /// Based on direct inversion of CDF
     pub fn cauchy(&mut self) -> f64 {
-        self.normal() / self.normal()
+        (PI*(self.gen_f64() - 0.5f64)).tan()
     }
 
-    ///Samples the student t distribution
+    /// Samples the student t distribution
     /// Algorithm From "Polar generation of random variates with the t-Distibution" - Ralph W. Bailey Mathematics of Computation 1994
-    /// DOI: https://doi.org/10.2307/2153537
+    /// DOI: <https://doi.org/10.2307/2153537/>
     pub fn student_t(&mut self, nu:f64)-> f64{
+        let (u, v) = self.disc2d();
 
-        let (mut u, mut v, mut w) = (0f64, 0f64, 0f64);
-
-        while w > 1f64{
-            u = self.gen_f64()*2f64 - 1f64;
-            v = self.gen_f64()*2f64 - 1f64;
-            w = u*u+v*v;
-        }
+        let w = u*u + v*v;
 
         let c = u*u / w;
         let r = nu*(w.powf(-2f64/v)-1f64);
         let p_res = (c*c*r*r).sqrt();
 
-        match self.gen_bool() {
-            true => p_res,
-            false => -p_res
-        }
-
+        if self.gen_bool() {p_res} else {-p_res}
     }
 
     /// Samples a Gamma Distribution with Γ(α,ß)
     /// Algorithm from "A simple method for generating gamma variables" - George Marsaglia, Wai Wan Tsang ACM Transactions on  Mathematical Software 2000
-    /// DOI: https://doi.org/10.1145/358407.358414
+    /// DOI: <https://doi.org/10.1145/358407.358414/>
     pub fn gamma(&mut self, alpha: f64, beta: f64) -> f64 {
         if alpha <= 1f64 {
             return self.gamma(alpha + 1.0, beta) * (self.gen_f64().powf(1f64 / alpha));
@@ -284,9 +268,10 @@ impl<T: Algorithm> PRNG<T> {
     }
 
     /// Samples a fischer distribution
+    /// if X1 ~ Chi(d1) and X2 ~ Chi(d2) then (X1/d1)/(X2/d2)~F(d1,d2)
     pub fn fischer(&mut self, d1: f64, d2: f64) -> f64 {
         let x_1 = self.chi_squared(d1);
-        let x_2 = self.chi_squared(d1);
+        let x_2 = self.chi_squared(d2);
         (x_1 / d1) / (x_2 / d2)
     }
 
@@ -310,6 +295,8 @@ impl<T: Algorithm> PRNG<T> {
         while sum < cdf {
             n += 1;
             prod *= l;
+            // implied loss of precision is safe as n will not hit 52 bits in any
+            // reasonable calculation
             denom *= n as f64;
             sum += prod / denom;
         }
@@ -323,4 +310,18 @@ impl<T: Algorithm> PRNG<T> {
         let lambda = self.gamma(r, p / (1.0 - p));
         self.poisson(lambda)
     }
+
+    /// Samples the 2D Disc
+    /// Via rejection sampling
+    #[inline(always)]
+    pub fn disc2d(&mut self)-> (f64, f64){
+        loop {
+            let u = self.gen_f64()*2f64 - 1f64;
+            let v = self.gen_f64()*2f64 - 1f64;
+            if u*u + v*v <= 1f64{
+                return (u,v)
+            }
+        }
+    }
+
 }

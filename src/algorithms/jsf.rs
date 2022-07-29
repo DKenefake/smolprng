@@ -14,7 +14,7 @@ prng_setup! {JsfLarge, JsfLarge,data, make_4_u64}
 impl Algorithm for JsfLarge {
     type Output = u64;
 
-    ///Translated from original C Source that can  be found [here](https://burtleburtle.net/bob/rand/smallprng.html).
+    /// Translated from original C Source that can be found [here](https://burtleburtle.net/bob/rand/smallprng.html).
     ///
     /// A copy of the original included here for preservation and verification of correctness.
     ///

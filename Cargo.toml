@@ -8,7 +8,8 @@ description = "A Small and Extensible PRNG written in Rust"
 repository = "https://github.com/DKenefake/SmolPRNG/"
 readme = "README.md"
 homepage = "https://github.com/DKenefake/SmolPRNG/"
-
+keywords = ["PRNG"]
+categories = ["pseudorandom number generation"]
 [dependencies]
 
 [profile.release]
