@@ -327,4 +327,17 @@ impl<T: Algorithm> PRNG<T> {
             }
         }
     }
+
+    /// Generates a random string of lower case latin letters of a given length
+    #[inline(always)]
+    pub fn random_string(&mut self, n: usize) -> String {
+        const SIZE: usize = 26;
+        const ALPHABET: [char; SIZE] = [
+            'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j',
+            'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm',
+        ];
+        (0..n)
+            .map(|_| ALPHABET[self.gen_u64() as usize % SIZE])
+            .collect()
+    }
 }

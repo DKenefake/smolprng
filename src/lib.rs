@@ -78,6 +78,7 @@ mod tests {
                 prng.logistic(0.0, 10.0);
                 prng.lognormal();
                 prng.negative_binomial(10.0, 2.0);
+                prng.random_string(100);
             }
         };
     }
