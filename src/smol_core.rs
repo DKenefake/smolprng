@@ -148,6 +148,21 @@ impl<T: Algorithm> PRNG<T> {
 
     make_gen! {gen_u128, u128, gen_u64, cast_to_u128}
 
+    ///Generates a random ``u8`` in the range of [0,R] without bias
+    pub fn gen_u8_in_range<const R:u8>(& mut self) -> u8{
+       
+        let mut mask:u8 = 0xffu8;
+        assert!(R >= 1u8);
+        let range = R - 1; 
+        mask >>= (range | 1u8).leading_zeros();
+        loop{
+            let x = self.gen_u8() & mask;
+            if x < range{
+                return x;
+            }
+        }
+    }
+
     ///Generates a random ``f64`` uniformly distributed on [0,1)
     #[inline(always)]
     pub fn gen_f64(&mut self) -> f64 {
@@ -337,7 +352,7 @@ impl<T: Algorithm> PRNG<T> {
             'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm',
         ];
         (0..n)
-            .map(|_| ALPHABET[self.gen_u64() as usize % SIZE])
+            .map(|_| ALPHABET[self.gen_u8_in_range::<26u8>() as usize])
             .collect()
     }
 }
