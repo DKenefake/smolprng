@@ -3,18 +3,18 @@
 ![crates.io](https://img.shields.io/crates/v/smolprng.svg)
 # SmolPRNG
 
-This is a small PRNG library/framwork written in pure Rust, that is a translation of another project of mine, [SmallPRNG](https://github.com/DKenefake/SmallPRNG). The main goal of this project is to not implement every feature possible but to provide a general framework for implmenting PRNG algorithms to test monte carlo codes. This was made primarilly as a educational project of learning Rust and it's features but I hope that this can be used for productive projects like SmallPRNG was. 
+This is a small PRNG library/framwork written in pure Rust, that is a translation of another project of mine, [SmallPRNG](https://github.com/DKenefake/SmallPRNG). The main goal of this project is to not implement every feature possible but to provide a general framework for implementing PRNG algorithms to test monte carlo codes. This was made primarily as a educational project of learning Rust, and it's features, but I hope that this can be used for productive projects like SmallPRNG was. 
 
 To live up to the name of ``SmolPRNG`` there are less then 1000 lines of code but implements over 22 different algorithms out of the box, can sample from 15 statistical distributions this includes all code + tests + docs + benchs.
 
-SmolPRNG performance is competitive to the Rand Rust crate and is much more straightforward to extend. The "no_std" feature can be used to remove the standard library dependency, but this is not the default. The compile time is on the order of .2 seconds on modern hardware. This package will also never allocate memory on the heap.
+SmolPRNG performance is competitive to the Rand Rust crate and is much more straightforward to extend. The ``no_std`` feature can be used to remove the standard library dependency, but this is not the default. The compile time is on the order of .2 seconds on modern hardware. This package will also never allocate memory on the heap with or without the ``std`` dependency.
 To include this crate in your project, you can use the following in your ``Cargo.toml`` file. With the most recent version being 0.1.6.
 ```toml
 [dependencies]
 smolprng = "0.1.6"
 ```
 
-To use this package without ``std`` environment, you can use the following in your ``Cargo.toml`` file. Note, as of now, turning of the std dependency will remove most of the advanced distribution sampling, but leaves uniform distribution sampling, bernoulli, binomial, and poisson distributions. The main limitation to including the other distributions is the lack of the certain special functions in the ``core`` library (``ln``, ``sqrt``, ``sin`` ect). 
+To use this package without a dependency to ``std``, you can use the following in your ``Cargo.toml`` file. Note, as of now, turning of the std dependency will remove most of the advanced distribution sampling, but leaves uniform distribution sampling, bernoulli, binomial, and poisson distributions. The main limitation to including the other distributions is the lack of the certain special functions in the ``core`` library (``ln``, ``sqrt``, ``sin`` ect). 
 ```toml
 [dependencies]
 smolprng = {version = "0.1.6", default-features = false}
