@@ -7,7 +7,18 @@ This is a small PRNG library/framwork written in pure Rust, that is a translatio
 
 To live up to the name of ``SmolPRNG`` there are less then 1000 lines of code but implements over 22 different algorithms out of the box, can sample from 15 statistical distributions this includes all code + tests + docs + benchs.
 
-SmolPRNG is performance competitive to the Rand Rust crate and is much more straightforward to extend.
+SmolPRNG performance is competitive to the Rand Rust crate and is much more straightforward to extend. The "no_std" feature can be used to remove the standard library dependency, but this is not the default. The compile time is on the order of .2 seconds on modern hardware. This package will also never allocate memory on the heap.
+To include this crate in your project, you can use the following in your ``Cargo.toml`` file. With the most recent version being 0.1.6.
+```toml
+[dependencies]
+smolprng = "0.1.6"
+```
+
+To use this package without ``std`` environment, you can use the following in your ``Cargo.toml`` file. Note, as of now, turning of the std dependency will remove most of the advanced distribution sampling, but leaves uniform sampling of bernoulli, binomial, and poisson distributions. The main limitation to including the other distributions is the lack of the certain special functions in the ``core`` library (``ln``, ``sqrt``, ``sin`` ect). 
+```toml
+[dependencies]
+smolprng = {version = "0.1.6", default-features = false}
+```
 
 ### Features
 
@@ -23,7 +34,7 @@ SmolPRNG is performance competitive to the Rand Rust crate and is much more stra
 
 ## Generate Numbers
 
-Generating random numbers is straight forward after initilizing a ``PRNG`` object
+Generating random numbers is straight forward after initializing a ``PRNG`` object
 
 ```rust
 let prng = PRNG{generator: JsfGenerator::default()};

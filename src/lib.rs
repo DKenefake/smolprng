@@ -1,6 +1,7 @@
 #![crate_name = "smolprng"]
 #![warn(missing_docs)]
-#![forbid(unsafe_code)]
+#![forbid(unsafe_code)] // forbid unsafe code
+
 #![warn(clippy::all, clippy::pedantic, clippy::nursery, clippy::cargo)]
 #![allow(clippy::implicit_return)]
 #![allow(clippy::float_arithmetic)]
@@ -14,6 +15,8 @@
 
 //! This is a PRNG Package `SmolPRNG` a small Rust package for pseudo-random  number generation
 //!
+extern crate alloc;
+
 // mod algorithms::jsf;
 pub mod algorithms;
 pub mod smol_core;
@@ -78,7 +81,6 @@ mod tests {
                 prng.logistic(0.0, 10.0);
                 prng.lognormal();
                 prng.negative_binomial(10.0, 2.0);
-                prng.random_string(100);
             }
         };
     }

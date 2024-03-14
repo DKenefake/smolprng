@@ -1,10 +1,16 @@
 //! This is the central module in the `SmolPRNG` crate, as this is where the definitions of `PRNG`, `Algorithm`, and `AlgorithmOutput` reside
+#[cfg(not(feature = "std"))]
+use core::f64::consts::E;
+#[cfg(not(feature = "std"))]
+use core::ops::{BitAnd, BitOrAssign, Shl, Shr};
 
+#[cfg(feature = "std")]
 use std::f64::consts::{E, PI};
-use std::ops::{BitAnd, BitOrAssign, Shl};
+#[cfg(feature = "std")]
+use std::ops::{BitAnd, BitOrAssign, Shl, Shr};
 
 /// PRNG is the central pseudo-random number generating front end.
-/// This is the front end for the enture package.
+/// This is the front end of the entire package.
 pub struct PRNG<T: Algorithm> {
     /// The algorithm that is inserted to the generator
     pub generator: T,
@@ -12,16 +18,16 @@ pub struct PRNG<T: Algorithm> {
 
 /// This is the central algorithm trait that is implemented bt the generators of the package
 pub trait Algorithm {
-    /// The ouput type of the Algorithm such as ``u32``, ect.
+    /// The output type of the Algorithm such as ``u32``, ect.
     type Output: AlgorithmOutput;
-    ///
-    /// Central generation function of the Algorithm trait, this take in a state struct and returns the ouput of the algorithm
+
+    /// Central generation function of the Algorithm trait, this takes in a state struct and returns the output of the algorithm
     fn gen(&mut self) -> Self::Output;
 }
-/// This is the helper trait that that all Algorithms must output a type of
+/// This is the helper trait that all Algorithms must output a type of
 /// ``u8``,``u16``,``u32``,``u64``,``u128``,
 pub trait AlgorithmOutput:
-    std::ops::Shr<u8, Output = Self> + Shl<u8, Output = Self> + BitOrAssign<Self> + Sized + BitAnd<Self>
+    Shr<u8, Output = Self> + Shl<u8, Output = Self> + BitOrAssign<Self> + Sized + BitAnd<Self>
 {
     /// The size in bytes of the algorithm output
     const SIZE: usize;
@@ -41,7 +47,7 @@ pub trait AlgorithmOutput:
     /// Helper function that converts to ``u128``
     fn cast_to_u128(self) -> u128;
 
-    /// Helper function returns that returns the lowest bit of an algorithm output as a bool
+    /// Helper function returns the lowest bit of an algorithm output as a bool
     fn get_low(self) -> bool;
 }
 
@@ -51,7 +57,7 @@ macro_rules! algorithm_output {
         $(
             impl AlgorithmOutput for $t {
 
-                const SIZE: usize = std::mem::size_of::<$t>();
+                const SIZE: usize = core::mem::size_of::<$t>();
 
                 fn cast_to_u8(self) -> u8{
                     self as u8
@@ -89,7 +95,7 @@ macro_rules! make_gen {
         #[inline(always)]
         pub fn $fn_name(&mut self) -> $output {
             assert!(T::Output::SIZE.count_ones() == 1);
-            const N_SIZE: usize = std::mem::size_of::<$output>();
+            const N_SIZE: usize = core::mem::size_of::<$output>();
             if T::Output::SIZE < N_SIZE {
                 return (self.$gen_from().$cast_to() << (4 * N_SIZE as u8))
                     | self.$gen_from().$cast_to();
@@ -149,15 +155,14 @@ impl<T: Algorithm> PRNG<T> {
     make_gen! {gen_u128, u128, gen_u64, cast_to_u128}
 
     ///Generates a random ``u8`` in the range of [0,R] without bias
-    pub fn gen_u8_in_range<const R:u8>(& mut self) -> u8{
-       
-        let mut mask:u8 = 0xffu8;
+    pub fn gen_u8_in_range<const R: u8>(&mut self) -> u8 {
+        let mut mask: u8 = 0xffu8;
         assert!(R >= 1u8);
-        let range = R - 1; 
+        let range = R - 1;
         mask >>= (range | 1u8).leading_zeros();
-        loop{
+        loop {
             let x = self.gen_u8() & mask;
-            if x < range{
+            if x < range {
                 return x;
             }
         }
@@ -177,8 +182,9 @@ impl<T: Algorithm> PRNG<T> {
         f32::from_bits(val) - 1.0f32
     }
 
-    /// Samples a normal distribution N(0,1) for 1 sample
+    /// Samples a normal distribution N(0,1) for one sample
     /// Algorithm from "A Note on the Generation of Random Normal Deviates" - G. E. P. Box, Mervin E. Muller The Annals of Mathematical Statistics 1958
+    #[cfg(feature = "std")]
     pub fn normal(&mut self) -> f64 {
         let (u, v) = self.disc2d();
         let s = u * u + v * v;
@@ -205,6 +211,7 @@ impl<T: Algorithm> PRNG<T> {
 
     /// Samples a Cauchy Distribution
     /// Based on direct inversion of CDF
+    #[cfg(feature = "std")]
     pub fn cauchy(&mut self) -> f64 {
         (PI * (self.gen_f64() - 0.5f64)).tan()
     }
@@ -212,6 +219,7 @@ impl<T: Algorithm> PRNG<T> {
     /// Samples the student t distribution
     /// Algorithm From "Polar generation of random variates with the t-Distibution" - Ralph W. Bailey Mathematics of Computation 1994
     /// DOI: <https://doi.org/10.2307/2153537/>
+    #[cfg(feature = "std")]
     pub fn student_t(&mut self, nu: f64) -> f64 {
         let (u, v) = self.disc2d();
 
@@ -231,6 +239,7 @@ impl<T: Algorithm> PRNG<T> {
     /// Samples a Gamma Distribution with Γ(α,ß)
     /// Algorithm from "A simple method for generating gamma variables" - George Marsaglia, Wai Wan Tsang ACM Transactions on  Mathematical Software 2000
     /// DOI: <https://doi.org/10.1145/358407.358414/>
+    #[cfg(feature = "std")]
     pub fn gamma(&mut self, alpha: f64, beta: f64) -> f64 {
         if alpha <= 1f64 {
             return self.gamma(alpha + 1.0, beta) * (self.gen_f64().powf(1f64 / alpha));
@@ -255,12 +264,14 @@ impl<T: Algorithm> PRNG<T> {
     /// Samples a Chi square distribution with nu degrees of freedom
     /// Based on relating chi squared distirubtion to the gamma distribution
     /// Y ~ Y(nu) <==> Y ~ gamma(0.5 nu, 2)
+    #[cfg(feature = "std")]
     pub fn chi_squared(&mut self, nu: f64) -> f64 {
         self.gamma(0.5 * nu, 2.0)
     }
 
     /// Samples a beta distribution
     /// Given X ~ gamma(alpha, 1) and Y ~ gamma(beta, 1) then X/(X+Y) ~ beta(alpha, beta)
+    #[cfg(feature = "std")]
     pub fn beta(&mut self, alpha: f64, beta: f64) -> f64 {
         let x = self.gamma(alpha, 1f64);
         let y = self.gamma(beta, 1f64);
@@ -269,18 +280,20 @@ impl<T: Algorithm> PRNG<T> {
 
     /// Samples a exponential distribution
     /// Direct inversion of CDF
+    #[cfg(feature = "std")]
     pub fn exponential(&mut self, lambda: f64) -> f64 {
         -self.gen_f64().ln() / lambda
     }
 
     /// Samples a log normal distribution
     /// by definition
+    #[cfg(feature = "std")]
     pub fn lognormal(&mut self) -> f64 {
         self.normal().exp()
     }
 
     /// Samples a logistic distribution
-    ///
+    #[cfg(feature = "std")]
     pub fn logistic(&mut self, mu: f64, beta: f64) -> f64 {
         let x = self.gen_f64();
         mu + beta * ((x / (1.0 - x)).ln())
@@ -288,6 +301,7 @@ impl<T: Algorithm> PRNG<T> {
 
     /// Samples a fischer distribution
     /// if X1 ~ Chi(d1) and X2 ~ Chi(d2) then (X1/d1)/(X2/d2)~F(d1,d2)
+    #[cfg(feature = "std")]
     pub fn fischer(&mut self, d1: f64, d2: f64) -> f64 {
         let x_1 = self.chi_squared(d1);
         let x_2 = self.chi_squared(d2);
@@ -324,7 +338,8 @@ impl<T: Algorithm> PRNG<T> {
     }
 
     /// Samples a negative binomial distribution
-    /// Relation between negative binaomial and gamma, then gamma to poisson
+    /// Relation between negative binomial and gamma, then gamma to poisson
+    #[cfg(feature = "std")]
     pub fn negative_binomial(&mut self, r: f64, p: f64) -> u64 {
         let lambda = self.gamma(r, p / (1.0 - p));
         self.poisson(lambda)
@@ -343,16 +358,4 @@ impl<T: Algorithm> PRNG<T> {
         }
     }
 
-    /// Generates a random string of lower case latin letters of a given length
-    #[inline(always)]
-    pub fn random_string(&mut self, n: usize) -> String {
-        const SIZE: usize = 26;
-        const ALPHABET: [char; SIZE] = [
-            'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j',
-            'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm',
-        ];
-        (0..n)
-            .map(|_| ALPHABET[self.gen_u8_in_range::<26u8>() as usize])
-            .collect()
-    }
 }

@@ -1,6 +1,6 @@
 [package]
 name = "smolprng"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 authors = ["Dustin Kenefake"]
 license = "BSD-3-Clause"
@@ -11,6 +11,11 @@ homepage = "https://github.com/DKenefake/SmolPRNG/"
 keywords = ["PRNG"]
 categories = ["pseudorandom number generation"]
 [dependencies]
+
+[features]
+default = ["std"]
+std = []
+no_std = []
 
 [profile.release]
 opt-level = 3
