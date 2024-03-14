@@ -26,7 +26,7 @@ pub use smol_core::*;
 #[cfg(test)]
 mod tests {
     use crate::*;
-
+    use alloc_counter::no_alloc;
     macro_rules! prng_gen {
         ($generator:ident, $generator_type:ty, $dist_run:expr) => {
             let mut prng = PRNG {
@@ -100,6 +100,7 @@ mod tests {
 
     macro_rules! gen_init_test {
         ($fn_name:ident, $gen_type:ty, $check_dist:expr) => {
+            #[no_alloc(forbid)]
             #[test]
             fn $fn_name() {
                 let prng = <$gen_type>::default();

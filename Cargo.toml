@@ -16,6 +16,9 @@ categories = ["pseudorandom number generation"]
 std = []
 no_std = []
 
+[dev-dependencies]
+alloc_counter = "0.0.4"
+
 [profile.release]
 opt-level = 3
 debug = false
