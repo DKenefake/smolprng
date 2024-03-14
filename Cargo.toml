@@ -13,7 +13,6 @@ categories = ["pseudorandom number generation"]
 [dependencies]
 
 [features]
-default = ["std"]
 std = []
 no_std = []
 
