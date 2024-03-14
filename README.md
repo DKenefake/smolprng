@@ -14,7 +14,7 @@ To include this crate in your project, you can use the following in your ``Cargo
 smolprng = "0.1.6"
 ```
 
-To use this package without ``std`` environment, you can use the following in your ``Cargo.toml`` file. Note, as of now, turning of the std dependency will remove most of the advanced distribution sampling, but leaves uniform sampling of bernoulli, binomial, and poisson distributions. The main limitation to including the other distributions is the lack of the certain special functions in the ``core`` library (``ln``, ``sqrt``, ``sin`` ect). 
+To use this package without ``std`` environment, you can use the following in your ``Cargo.toml`` file. Note, as of now, turning of the std dependency will remove most of the advanced distribution sampling, but leaves uniform distribution sampling, bernoulli, binomial, and poisson distributions. The main limitation to including the other distributions is the lack of the certain special functions in the ``core`` library (``ln``, ``sqrt``, ``sin`` ect). 
 ```toml
 [dependencies]
 smolprng = {version = "0.1.6", default-features = false}
