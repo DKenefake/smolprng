@@ -67,19 +67,30 @@ mod tests {
             let _v = prng.generator.next();
 
             if $dist_run {
+
                 prng.poisson(1f64);
                 prng.poisson(12f64);
+                #[cfg(feature = "std")]
                 prng.gamma(0.5, 0.5);
+                #[cfg(feature = "std")]
                 prng.chi_squared(10.0);
+                #[cfg(feature = "std")]
                 prng.normal();
                 prng.bernoulli(0.5);
+                #[cfg(feature = "std")]
                 prng.beta(1.0, 1.0);
                 prng.binomial(10, 0.3);
+                #[cfg(feature = "std")]
                 prng.cauchy();
+                #[cfg(feature = "std")]
                 prng.exponential(-10.0);
+                #[cfg(feature = "std")]
                 prng.fischer(25f64, 10f64);
+                #[cfg(feature = "std")]
                 prng.logistic(0.0, 10.0);
+                #[cfg(feature = "std")]
                 prng.lognormal();
+                #[cfg(feature = "std")]
                 prng.negative_binomial(10.0, 2.0);
             }
         };
